@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Demostración</title>
+    <link rel="stylesheet" href="../css/demostracion.css">
+</head>
+<body>
+
+<div class="top-bar">
+    <button class="btn-back" onclick="window.location.href='catalogo.html'">←</button>
+    <h1 class="titulo-app">TECHFIT</h1>
+</div>
+
+<div class="contenedor">
+    
+    <!-- TÍTULO DEL EJERCICIO -->
+    <h1 id="titulo-ejercicio" class="titulo-ejercicio"></h1>
+
+    <div class="grid-demo">
+
+        <!-- INSTRUCCIONES -->
+        <div class="columna instrucciones">
+            <h2>Instrucciones</h2>
+            <ul id="lista-instrucciones"></ul>
+        </div>
+
+        <!-- VIDEO / IMAGEN -->
+        <div class="columna demostracion">
+            <h2>Demostración</h2>
+            <img id="imagen-ejercicio" class="img-demo">
+        </div>
+
+        <!-- DURACIÓN + BENEFICIOS -->
+        <div class="columna duracion">
+            <h2>Duración</h2>
+            <p id="texto-duracion"></p>
+
+            <h2>Beneficios</h2>
+            <ul id="lista-beneficios"></ul>
+        </div>
+    </div>
+
+    <button id="btnIniciar" class="btn-iniciar">Iniciar</button>
+
+</div>
+
+<script src="../js/demostracion.js"></script>
+</body>
+</html>

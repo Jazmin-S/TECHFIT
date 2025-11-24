@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo - TECHFIT</title>
+    <link rel="stylesheet" href="../css/catalogo.css">
+</head>
+<body>
+
+<!-- NAV SUPERIOR -->
+<nav class="navbar">
+    <div id="menuBtn" class="menu-icon">☰</div>
+
+    <h1 class="header-title">Bienvenido</h1>
+
+    <!-- ICONO PERFIL REDIRECCIONA -->
+    <div class="profile-icon" onclick="window.location.href='perfil.html'">
+        <img src="../img/perfil.png" alt="perfil">
+    </div>
+</nav>
+
+<!-- SIDEBAR -->
+<div id="sidebar" class="sidebar">
+    <div class="close-btn" id="closeSidebar">✕</div>
+
+    <h2>Categorías</h2>
+
+    <a href="#">Ejercicio general</a>
+    <a href="#">Rehabilitación</a>
+    <a href="#">Adulto mayor</a>
+    <a href="#">Movilidad</a>
+    <a href="#">Cardio ligero</a>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" class="overlay"></div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<section class="contenido">
+    <h2 class="titulo-catalogo">Catálogo</h2>
+    <h3 class="subtitulo-catalogo">Ejercicios generales</h3>
+
+    <div id="catalogoGrid" class="grid"></div>
+</section>
+
+<!-- Scripts -->
+<script src="../js/catalogo.js"></script>
+<script src="../js/menu.js"></script>
+
+</body>
+</html>

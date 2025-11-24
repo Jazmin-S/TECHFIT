@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>TECHFIT - Inicio de sesión</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/header.css">
+</head>
+<body>
+
+<div class="header">
+    <h1>TECHFIT</h1>
+</div>
+
+<div class="container">
+
+    <h2>Inicio de sesión</h2>
+
+    <form id="formLogin">
+
+        <input type="email" name="correo" placeholder="Correo electrónico" required>
+
+        <div class="password-wrapper">
+            <input id="loginPass" type="password" name="contrasena" placeholder="Contraseña" required>
+            <span class="toggle-pass" onclick="toggleLoginPass()">👁</span>
+        </div>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+    <a href="pages/registro.html">Crear cuenta</a>
+
+</div>
+
+<script src="js/login.js"></script>
+
+</body>
+</html>

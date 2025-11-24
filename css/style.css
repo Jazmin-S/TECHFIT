@@ -1,0 +1,113 @@
+/* ---------- VARIABLES ---------- */
+:root {
+    --azul: #0078FF;
+    --azul-oscuro: #005ECC;
+    --azul-claro: #E6F1FF;
+    --gris: #f2f2f2;
+    --texto: #222;
+}
+
+/* ---------- GENERAL ---------- */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--gris);
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- CONTENEDOR ---------- */
+.container {
+    width: 380px;
+    margin: 40px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* ---------- TITULOS ---------- */
+h2 {
+    text-align: center;
+    color: var(--azul);
+}
+
+/* ---------- INPUTS ---------- */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid var(--azul-claro);
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 6px rgba(0,120,255,0.3);
+}
+
+/* ---------- BOTONES ---------- */
+button {
+    width: 100%;
+    background: var(--azul);
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--azul-oscuro);
+}
+
+/* ---------- LINKS ---------- */
+a {
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    color: var(--azul-oscuro);
+}
+
+/* ---------- CONTRASEÑA + ICONO ---------- */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 45px;   
+    box-sizing: border-box;
+}
+
+.toggle-pass {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
+    font-size: 18px;
+    color: #444;
+}
+
+/* ---------- GUIA DE CONTRASEÑA ---------- */
+#passGuide {
+    list-style: none;
+    padding: 0;
+    font-size: 14px;
+}
+
+#passGuide li {
+    color: #b33;
+}
+
+#passGuide li.valid {
+    color: #0a7;
+    font-weight: bold;
+}

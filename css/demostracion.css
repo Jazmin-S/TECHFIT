@@ -121,3 +121,29 @@ body {
         text-align: center;
     }
 }
+.navbar {
+    background: linear-gradient(to bottom, #1da1f2, #1291dd);
+    height: 70px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+.btn-back {
+    font-size: 25px;
+    background: #0e6fb5;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.header-title {
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+}

@@ -262,3 +262,16 @@ if (ejercicios[ejercicio]) {
 } else {
     document.getElementById("titulo-ejercicio").textContent = "Ejercicio no encontrado.";
 }
+
+// ------------------------ BOTÓN INICIAR ------------------------
+
+// Esto hace que el botón lleve a pages/ejecucion.html (misma carpeta que demostracion.html)
+const btnIniciar = document.getElementById("btnIniciar");
+if (btnIniciar) {
+    btnIniciar.addEventListener("click", () => {
+        // Como demostracion.html está en /pages/, usamos ruta relativa al mismo folder:
+       window.location.href = `ejecucion.html?ejercicio=${ejercicio}`;
+
+        // Si por alguna razón tu archivo estuviera en otra ruta, aquí cambiarías la URL.
+    });
+}

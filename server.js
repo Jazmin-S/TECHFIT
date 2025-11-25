@@ -4,15 +4,21 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
+
+// ---------------------------
+// 🔓 Middlewares
+// ---------------------------
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// 📌 Conexión a MySQL
+// ---------------------------
+// 🛢 Conexión MySQL
+// ---------------------------
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "123456",   // coloca tu contraseña si tiene
+    password: "123456",   // tu contraseña
     database: "techfit"
 });
 
@@ -21,7 +27,9 @@ db.connect(err => {
     console.log("✔ Conectado a MySQL");
 });
 
-// 📌 Registrar usuario
+// ---------------------------
+// 👤 Registrar usuario
+// ---------------------------
 app.post("/registrar", (req, res) => {
     const { nombre, correo, contrasena, tipo } = req.body;
 
@@ -39,7 +47,9 @@ app.post("/registrar", (req, res) => {
     });
 });
 
-// 📌 Login
+// ---------------------------
+// 🔐 Login (CORREGIDO)
+// ---------------------------
 app.post("/login", (req, res) => {
     const { correo, contrasena } = req.body;
 
@@ -55,14 +65,28 @@ app.post("/login", (req, res) => {
         const usuario = results[0];
 
         if (usuario.contrasena === contrasena) {
-            return res.json({ status: "OK" });
-        } else {
+
+            // 🚀 Aquí enviamos el usuario COMPLETO al frontend
+            return res.json({
+                status: "OK",
+                usuario: {
+                    id_usuario: usuario.id_usuario,
+                    nombre: usuario.nombre,
+                    correo: usuario.correo,
+                    tipo_usuario: usuario.tipo_usuario,
+                    fecha_registro: usuario.fecha_registro
+                }
+            });
+        } 
+        else {
             return res.json({ status: "CONTRA_INCORRECTA" });
         }
     });
 });
 
-// Servidor
+// ---------------------------
+// 🚀 Iniciar servidor
+// ---------------------------
 app.listen(3000, () => {
     console.log("🔥 Servidor Node.js corriendo en http://localhost:3000");
 });

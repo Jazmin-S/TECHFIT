@@ -1,171 +1,215 @@
-/* -------- GENERAL -------- */
-
+/* ---------------------------- */
+/* ESTILOS GENERALES */
+/* ---------------------------- */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #ffffff;
-    overflow-x: hidden;
+    background: #e9f3ff;
+    color: #0b2f55;
+    overflow-x: hidden !important; /* ←🔥 Evita 100% que el menú se vea salido */
 }
 
-/* -------- NAV SUPERIOR -------- */
-
+/* ---------------------------- */
+/* NAVBAR */
+/* ---------------------------- */
 .navbar {
+    background: linear-gradient(to bottom, #1da1f2, #1291dd);
+    height: 70px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    background: #2ba6e8;
-    padding: 12px 20px;
-    position: fixed;
+    padding: 0 15px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    position: sticky;
     top: 0;
-    width: 100%;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    z-index: 1000;
+    z-index: 200;
+    overflow: hidden !important;
 }
 
 .menu-icon {
-    font-size: 28px;
+    font-size: 30px;
+    color: white;
     cursor: pointer;
-    user-select: none;
+    padding: 5px;
+    margin-right: 10px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.menu-icon:hover {
+    background: rgba(255,255,255,0.15);
 }
 
 .header-title {
-    color: #000;
-    font-size: 28px;
-    margin: 0;
-    font-weight: bold;
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+    font-size: 26px;
+    font-weight: 900;
 }
 
-/* ICONO PERFIL */
+/* Perfil */
 .profile-icon {
+    width: 45px;
+    height: 45px;
     cursor: pointer;
-     margin-right: 25px;
+    flex-shrink: 0;
 }
 
 .profile-icon img {
-    width: 32px;
-    height: 32px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    display: block;
+    border: 2px solid white;
 }
 
-@media (max-width: 600px) {
-    .profile-icon img {
-        width: 28px;
-        height: 28px;
-    }
+/* ---------------------------- */
+/* CONTENIDO */
+/* ---------------------------- */
+.contenido {
+    padding: 25px;
+    max-width: 1100px;
+    margin: auto;
 }
 
-/* -------- SIDEBAR -------- */
+.titulo-catalogo {
+    font-size: 30px;
+    margin-bottom: 5px;
+    color: #004b88;
+}
 
+.subtitulo-catalogo {
+    font-size: 18px;
+    color: #1a6fb4;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 0 10px rgba(0,0,0,0.18);
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.card h3 {
+    font-size: 17px;
+    padding: 12px;
+    margin: 0;
+    color: #003d73;
+    font-weight: bold;
+}
+
+/* ---------------------------- */
+/* SIDEBAR */
+/* ---------------------------- */
 .sidebar {
-    height: 100%;
-    width: 260px;
-    background: #ffffff;
     position: fixed;
     top: 0;
-    left: -300px;
-    padding: 80px 20px;
-    box-shadow: 3px 0 15px rgba(0,0,0,0.4);
-    transition: left 0.35s ease;
-    z-index: 1500;
+    left: -370px; /* ←🔥 AÚN MÁS oculto para evitar fuga de 1px */
+    width: 260px;
+    height: 100%;
+    background: #0e6fb5;
+    padding: 20px;
+    box-shadow: 3px 0 10px rgba(0,0,0,0.3);
+    transition: 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .sidebar.open {
     left: 0;
 }
 
-/* Botón X */
-.close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 26px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
 .sidebar h2 {
-    margin-bottom: 25px;
-    font-size: 22px;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .sidebar a {
     display: block;
-    margin: 18px 0;
+    color: white;
     font-size: 18px;
+    padding: 12px 8px;
     text-decoration: none;
-    color: #000;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ffffff33;
+    border-radius: 6px;
     transition: 0.2s;
 }
 
 .sidebar a:hover {
-    color: #2ba6e8;
-    border-bottom-color: #2ba6e8;
+    background: #1b82d4;
 }
 
-/* -------- OVERLAY -------- */
+.close-btn {
+    font-size: 26px;
+    text-align: right;
+    cursor: pointer;
+    color: white;
+    margin-bottom: 10px;
+}
 
+/* ---------------------------- */
+/* OVERLAY */
+/* ---------------------------- */
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.25);
-    display: none;
-    z-index: 1400;
+    background: #00000066;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 900;
 }
 
 .overlay.show {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
-/* -------- CONTENIDO -------- */
-
-.contenido {
-    width: 90%;
-    margin: 120px auto 20px auto;
+/* ---------------------------- */
+/* BOTÓN CERRAR SESIÓN */
+/* ---------------------------- */
+.logout-btn {
+    width: 100%;
+    font-size: 18px;
+    padding: 12px;
+    background: #c62828;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    margin-top: 20px;
+    cursor: pointer;
 }
 
-.titulo-catalogo {
-    font-size: 32px;
-    margin-bottom: 5px;
-}
-
-.subtitulo-catalogo {
-    font-size: 22px;
-    margin-bottom: 30px;
-    color: #333;
-}
-
-/* -------- GRID -------- */
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 35px;
-    justify-items: center;
-}
-
-.card {
-    text-align: center;
-    text-decoration: none;
-    color: #000;
-}
-
-.card img {
-    width: 240px;
-    height: 240px;
-    object-fit: cover;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-}
-
-.card h3 {
-    margin-top: 10px;
-    font-size: 20px;
-    font-weight: bold;
+.logout-btn:hover {
+    background: #a31414;
 }

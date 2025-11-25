@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil - TECHFIT</title>
+
+    <link rel="stylesheet" href="../css/perfil.css">
+</head>
+<body>
+
+<!-- Encabezado -->
+<header class="header">
+    <a href="catalogo.html" class="btn-volver">← Volver</a>
+    <h1 class="title">TECHFIT</h1>
+</header>
+
+<!-- Contenedor del perfil -->
+<div class="perfil-container">
+
+    <!-- Foto de perfil -->
+    <div class="foto-container">
+        <img id="fotoPerfil" src="../img/user_default.png" alt="Foto de perfil">
+    </div>
+
+    <h2 id="nombreUsuario" class="nombre"></h2>
+
+    <p id="descripcionUsuario" class="descripcion">
+        Usuario activo en TECHFIT. Entrenamientos personalizados según su tipo.
+    </p>
+
+    <div class="perfil-card">
+        <p><strong>Correo:</strong> <span id="correoUsuario"></span></p>
+        <p><strong>Tipo de usuario:</strong> <span id="tipoUsuario"></span></p>
+        <p><strong>Fecha de registro:</strong> <span id="fechaRegistro"></span></p>
+    </div>
+</div>
+
+<script src="../js/perfil.js"></script>
+<script src="../js/voice-core.js"></script>
+
+</body>
+</html>

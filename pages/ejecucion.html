@@ -2,24 +2,81 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Ejercicio - TECHFIT</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Ejecución | TECHFIT</title>
+    <link rel="stylesheet" href="../css/ejecucion.css">
 </head>
 <body>
 
 <h1 class="title">Ejecución del ejercicio</h1>
+<h2 id="nombre-ejercicio" class="subtitle"></h2>
 
-<div class="center">
-    <video id="video" width="450" height="350" autoplay></video>
+<div class="camera-container">
+    <video id="video" autoplay playsinline></video>
+    <canvas id="poseCanvas"></canvas>
 </div>
 
-<p class="mensaje">Mantén la postura correcta para continuar.</p>
+<p id="status" class="mensaje">Preparando cámara e IA...</p>
+
+<p id="feedback" class="retro"></p>
+<p id="feedback" class="retro"></p>
+
+<div class="chat-container">
+  <h3>Chat con tu entrenador AI</h3>
+  <div id="chat-messages" class="chat-messages"></div>
+  <div class="chat-input-row">
+      <input id="chat-input" type="text" placeholder="Escribe tu duda sobre el ejercicio...">
+      <button id="chat-send">Enviar</button>
+  </div>
+  <button id="btnVoice" class="voice-btn">🎤 Comandos de voz</button>
+</div>
+
+
+<div id="countdown" class="counter"></div>
+<div id="timer" class="timer"></div>
+
+<div class="hud">
+    <div class="hud-item">
+        <span class="hud-label">Nivel</span>
+        <span id="hud-level" class="hud-value">1</span>
+    </div>
+
+    <div class="hud-item hud-xp">
+        <span class="hud-label">XP</span>
+        <div class="xp-bar">
+            <div id="xp-fill" class="xp-fill"></div>
+        </div>
+        <span id="hud-xp" class="hud-small">0 / 100</span>
+    </div>
+
+    <div class="hud-item">
+        <span class="hud-label">Reps</span>
+        <span id="hud-reps" class="hud-value">0</span>
+    </div>
+
+    <div class="hud-item">
+        <span class="hud-label">Score</span>
+        <span id="hud-score" class="hud-value">0</span>
+    </div>
+
+    <div class="hud-item">
+        <span class="hud-label">Última repetición</span>
+        <span id="hud-grade" class="hud-value">-</span>
+    </div>
+</div>
 
 <div class="btn-row">
-    <button onclick="pausar()">Pausar</button>
-    <button onclick="detener()">Detener</button>
+    <button id="btnPausar">Pausar</button>
+    <button id="btnDetener">Detener</button>
 </div>
 
+
+<!-- IA -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+
 <script src="../js/camara.js"></script>
+<script src="../js/voice-core.js"></script>
+
 </body>
 </html>

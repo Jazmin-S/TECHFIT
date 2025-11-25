@@ -1,0 +1,107 @@
+/* Fondo general */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #e9f3ff;
+}
+
+/* ---------------------- */
+/* ENCABEZADO */
+/* ---------------------- */
+.header {
+    width: 100%;
+    background: linear-gradient(to bottom, #1da1f2, #1291dd);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 3px 8px #00000033;
+}
+
+.btn-volver {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    background: #0e6fb5;
+    padding: 8px 15px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.btn-volver:hover {
+    background: #0a5c99;
+}
+
+.title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 40px; /* 🔥 Más grande */
+    font-weight: 900; /* 🔥 Más grueso */
+    letter-spacing: 2px; /* 🔥 Más estilizado */
+    color: white;
+    margin-right: 55px; /* Ajuste para contrarrestar el botón Volver */
+    margin-left: -20px; /* Centrar visualmente */
+    text-shadow: 0px 2px 4px #00000055; /* 🔥 Brillito profesional */
+}
+
+
+/* ---------------------- */
+/* PERFIL */
+/* ---------------------- */
+
+.perfil-container {
+    max-width: 600px;
+    margin: 60px auto 40px;
+    text-align: center;
+}
+
+/* FOTO DE PERFIL */
+.foto-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+.foto-container img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 0 10px #00000044;
+}
+
+/* Nombre */
+.nombre {
+    font-size: 28px;
+    color: #003d73;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+/* Descripción */
+.descripcion {
+    color: #555;
+    font-size: 16px;
+    max-width: 350px;
+    margin: 0 auto 20px;
+}
+
+/* Tarjeta de datos */
+.perfil-card {
+    background: #dcecff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px #00000022;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.perfil-card p {
+    font-size: 19px;
+    margin: 10px 0;
+}
+
+strong {
+    color: #003d73;
+}

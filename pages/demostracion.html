@@ -7,16 +7,16 @@
 </head>
 <body>
 
+<!-- NAV -->
 <nav class="navbar">
     <button class="btn-back" onclick="window.location.href='catalogo.html'">←</button>
     <h1 class="header-title">TECHFIT</h1>
-    <div style="width:45px;height:45px;"></div> <!-- para centrar el título -->
+    <div style="width:45px;height:45px;"></div>
 </nav>
 
-
 <div class="contenedor">
-    
-    <!-- TÍTULO DEL EJERCICIO -->
+
+    <!-- TÍTULO -->
     <h1 id="titulo-ejercicio" class="titulo-ejercicio"></h1>
 
     <div class="grid-demo">
@@ -27,13 +27,13 @@
             <ul id="lista-instrucciones"></ul>
         </div>
 
-        <!-- VIDEO / IMAGEN -->
+        <!-- VIDEO -->
         <div class="columna demostracion">
             <h2>Demostración</h2>
-            <img id="imagen-ejercicio" class="img-demo">
+            <div id="video-container"></div>
         </div>
 
-        <!-- DURACIÓN + BENEFICIOS -->
+        <!-- DURACIÓN Y BENEFICIOS -->
         <div class="columna duracion">
             <h2>Duración</h2>
             <p id="texto-duracion"></p>
@@ -43,12 +43,29 @@
         </div>
     </div>
 
-    <button id="btnIniciar" class="btn-iniciar">Iniciar</button>
+    <button id="btnIniciar" class="btn-iniciar">Iniciar ejercicio</button>
+</div>
 
+<!-- BOTÓN DE COMANDOS -->
+<button id="btnVoicePanel" class="voice-btn">🎤 Comandos</button>
+
+<!-- PANEL -->
+<div id="voicePanel" class="voice-panel">
+    <h3>🎤 Comandos disponibles</h3>
+    <ul>
+        <li>“Iniciar ejercicio”</li>
+        <li>“Reproducir video”</li>
+        <li>“Pausar video”</li>
+        <li>“Subir volumen”</li>
+        <li>“Bajar volumen”</li>
+        <li>“Explicar ejercicio”</li>
+        <li>“Salir”</li>
+    </ul>
+    <p class="tip">Micrófono activo</p>
 </div>
 
 <script src="../js/demostracion.js"></script>
-<script src="../js/voice-core.js"></script>
+<script src="../js/voice-demostracion.js"></script>
 
 </body>
 </html>

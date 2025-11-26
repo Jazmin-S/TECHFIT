@@ -1,250 +1,218 @@
-/* ----- ESTILO GENERAL ----- */
 body {
-    background: #0f1c2e;
+    background: radial-gradient(circle at top, #0f1c2e, #0a1522 70%);
     font-family: "Poppins", sans-serif;
-    color: #fff;
+    color: #e1efff;
     margin: 0;
     padding: 20px;
     text-align: center;
 }
 
+/* Títulos */
 .title {
-    font-size: 32px;
-    margin-bottom: 0;
+    font-size: 34px;
     color: #4ca3ff;
+    text-shadow: 0 0 8px #1e6fff;
 }
 
 .subtitle {
-    font-size: 20px;
-    margin-top: 5px;
-    margin-bottom: 20px;
+    font-size: 22px;
     color: #9fd2ff;
+    margin-bottom: 20px;
 }
 
-/* ----- CONTENEDOR DE CÁMARA Y CANVAS ----- */
+/* Video */
 .camera-container {
     position: relative;
     display: inline-block;
-    margin-top: 10px;
 }
 
 #video, #poseCanvas {
     width: 640px;
     max-width: 90vw;
-    border-radius: 20px;
+    border-radius: 18px;
     border: 3px solid #4ca3ff;
-    box-shadow: 0 0 25px rgba(76, 163, 255, 0.5);
+    box-shadow: 0 0 25px rgba(76,163,255,0.5), 0 0 50px rgba(0,140,255,0.3);
 }
 
 #poseCanvas {
     position: absolute;
-    left: 0;
     top: 0;
-    pointer-events: none;
+    left: 0;
 }
 
-/* ----- TEXTO DE ESTADO Y FEEDBACK ----- */
-.mensaje {
-    font-size: 18px;
-    margin: 15px 0 5px;
-}
-
-.counter {
-    font-size: 40px;
-    margin-top: 5px;
-    color: #4ca3ff;
-}
-
-.timer {
-    margin-top: 5px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #00ff7f;
-}
-
-.retro {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #a7c7ff;
-    min-height: 20px;
-}
-
-/* ----- HUD GAMER ----- */
+/* HUD */
 .hud {
-    margin: 20px auto 10px;
+    margin: 20px auto;
     max-width: 900px;
     display: flex;
+    gap: 15px;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
 }
 
 .hud-item {
-    background: #152336;
-    padding: 10px 15px;
+    background: rgba(21,35,54,0.8);
+    padding: 15px;
     border-radius: 12px;
-    min-width: 130px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.35);
-    text-align: center;
+    width: 150px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 10px rgba(0,60,120,0.4);
 }
 
-.hud-label {
-    display: block;
-    font-size: 12px;
-    color: #9fb4d6;
-    margin-bottom: 4px;
-}
-
-.hud-value {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.hud-small {
-    display: block;
-    margin-top: 4px;
-    font-size: 11px;
-    color: #b8c7e3;
-}
-
-.hud-xp .xp-bar {
-    margin-top: 3px;
-    width: 140px;
-    height: 8px;
-    background: #1b2940;
-    border-radius: 999px;
-    overflow: hidden;
-    border: 1px solid #29446e;
-}
-
-.xp-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #42ffb8, #4ca3ff);
-    transition: width 0.25s ease;
-}
-
-/* ----- BOTONES ----- */
-.btn-row {
-    margin-top: 15px;
-}
-
+/* Botones */
 button {
-    background: #4ca3ff;
-    border: none;
-    color: white;
-    padding: 12px 25px;
-    margin: 0 15px;
+    padding: 14px 28px;
     font-size: 18px;
-    border-radius: 10px;
+    border-radius: 12px;
+    border: none;
+    background: #1f7cff;
+    color: white;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: .3s;
+    box-shadow: 0 0 12px rgba(31,124,255,0.6);
 }
 
 button:hover {
-    background: #1e8bff;
+    background: #1462d3;
 }
 
-/* ----- CHAT ENTRENADOR AI ----- */
-.chat-container {
-    margin: 30px auto;
-    width: 400px;
-    max-width: 95vw;
-    background: #112034;
-    border: 2px solid #18324f;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 0 20px rgba(76, 163, 255, 0.25);
-}
-
-.chat-container h3 {
-    margin: 0;
-    margin-bottom: 10px;
-    color: #4ca3ff;
-    font-size: 20px;
-}
-
-.chat-messages {
-    height: 200px;
-    overflow-y: auto;
-    background: #0c1a2a;
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid #223b5a;
-    margin-bottom: 10px;
-}
-
-/* Estilos de mensajes */
-.chat-msg {
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    border-radius: 10px;
-    font-size: 14px;
-    max-width: 85%;
-    line-height: 1.3;
-}
-
-.chat-user {
-    background: #4ca3ff;
-    color: white;
-    margin-left: auto;
-    text-align: right;
-}
-
-.chat-coach {
-    background: #1a2e45;
-    color: #b4d5ff;
-    margin-right: auto;
-}
-
-/* Input del chat */
-.chat-input-row {
-    display: flex;
-    gap: 10px;
-}
-
-.chat-input-row input {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: 0;
-    font-size: 16px;
-    background: #0d1c30;
-    color: white;
-    outline: none;
-}
-
-.chat-input-row button {
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 16px;
-}
-
-/* Botón de voz */
+/* Botón flotante */
 .voice-btn {
-    width: 100%;
-    margin-top: 10px;
-    background: #2b5c94;
+    position: fixed;
+    right: 20px;
+    bottom: 25px;
+    padding: 14px 22px;
+    border-radius: 30px;
+    background: #0a84ff;
+    color: white;
+    box-shadow: 0 0 20px rgba(0,140,255,0.7);
+    border: 2px solid rgba(255,255,255,0.2);
+    z-index: 3000;
 }
 
-.voice-btn:hover {
-    background: #1e4d86;
+/* Panel */
+.voice-panel {
+    position: fixed;
+    right: 20px;
+    bottom: 90px;
+    width: 280px;
+    max-height: 65vh; /* 🔥 ALTURA VISIBLE MÁXIMA */
+    background: rgba(13,25,44,0.96);
+    border: 1px solid rgba(76,163,255,0.4);
+    backdrop-filter: blur(10px);
+    padding: 18px;
+    border-radius: 18px;
+    box-shadow: 0 0 25px rgba(0,140,255,0.4);
+    overflow-y: auto; /* 🔥 HABILITA SCROLL */
+    overscroll-behavior: contain; /* 🔥 EVITA QUE LA PÁGINA SE MUEVA */
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s;
+    scrollbar-width: thin;
+    scrollbar-color: #4ca3ff #0e1a2e;
+    z-index: 4000;
 }
 
-/* ----- SCROLLBAR ----- */
-::-webkit-scrollbar {
+/* Para Chrome */
+.voice-panel::-webkit-scrollbar {
     width: 8px;
 }
-
-::-webkit-scrollbar-track {
-    background: #0c1a2a;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #3a6ea8;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
+.voice-panel::-webkit-scrollbar-thumb {
     background: #4ca3ff;
+    border-radius: 8px;
 }
+
+
+.voice-panel.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.voice-panel h3 {
+    margin: 10px 0;
+    color: #4ca3ff;
+}
+
+.voice-panel li {
+    list-style: none;
+    margin-bottom: 6px;
+    padding: 8px;
+    background: rgba(40,70,110,0.4);
+    border-left: 4px solid #4ca3ff;
+    border-radius: 6px;
+}
+
+/* MODO INTENSO */
+.modo-intenso #video {
+    animation: intenseGlow 1.2s infinite alternate;
+}
+
+@keyframes intenseGlow {
+    0% { box-shadow: 0 0 25px red; }
+    100% { box-shadow: 0 0 60px #ff2424; }
+}
+
+/* MODO RECUPERATIVO */
+.modo-recuperativo #video {
+    animation: softGlow 2.5s infinite alternate;
+}
+
+@keyframes softGlow {
+    0% { box-shadow: 0 0 20px #00ffc3; }
+    100% { box-shadow: 0 0 40px #00e0a8; }
+}
+
+/* MODO NOCTURNO */
+.modo-nocturno {
+    filter: brightness(0.6);
+}
+
+.modo-nocturno #video {
+    box-shadow: 0 0 35px #4c72ff;
+}
+
+/* MODO POWER */
+.modo-power #video {
+    animation: powerGlow 1s infinite alternate;
+}
+
+@keyframes powerGlow {
+    0% { box-shadow: 0 0 25px #ff00ff; }
+    100% { box-shadow: 0 0 60px #cc00ff; }
+}
+/* ===============================
+   AURAS DE REPETICIÓN CORRECTA
+================================*/
+
+.rep-perfect #video, 
+.rep-perfect #poseCanvas {
+    animation: repPerfectGlow 0.7s ease-out;
+}
+
+@keyframes repPerfectGlow {
+    0% { box-shadow: 0 0 40px #00ff88, 0 0 90px #00ff88; }
+    100% { box-shadow: 0 0 0px transparent; }
+}
+
+.rep-good #video, 
+.rep-good #poseCanvas {
+    animation: repGoodGlow 0.7s ease-out;
+}
+
+@keyframes repGoodGlow {
+    0% { box-shadow: 0 0 25px #5dff9e, 0 0 50px #5dff9e; }
+    100% { box-shadow: 0 0 0px transparent; }
+}
+
+.rep-bad #video, 
+.rep-bad #poseCanvas {
+    animation: repBadGlow 0.7s ease-out;
+}
+
+@keyframes repBadGlow {
+    0% { box-shadow: 0 0 40px #ff1a1a, 0 0 80px #ff1a1a; }
+    100% { box-shadow: 0 0 0px transparent; }
+}
+

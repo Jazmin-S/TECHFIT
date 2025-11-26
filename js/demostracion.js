@@ -1,3 +1,7 @@
+// ===============================================================
+//     CARGAR INFORMACIÓN DEL EJERCICIO DESDE LA URL
+// ===============================================================
+
 // Obtener parámetro de la URL
 const params = new URLSearchParams(window.location.search);
 const ejercicio = params.get("ejercicio");
@@ -96,7 +100,7 @@ Series: 3
             "Colócate frente a una pared a medio metro de distancia.",
             "Apoya las manos a la altura del pecho.",
             "Mantén el cuerpo alineado (sin arquear la espalda).",
-            "Flexiona los codos y acerca el pecho a la pared.",
+            "Flexiona los ejes y acerca el pecho a la pared.",
             "Empuja para volver a la posición inicial.",
             "Controla la respiración durante el movimiento.",
             "Evita que los codos se abran demasiado.",
@@ -222,7 +226,10 @@ Series: 3
     }
 };
 
-// ------------------------ MOSTRAR DATOS ------------------------
+
+// ===============================================================
+//             RENDER DEL EJERCICIO SELECCIONADO
+// ===============================================================
 
 if (ejercicios[ejercicio]) {
 
@@ -231,10 +238,9 @@ if (ejercicios[ejercicio]) {
     // Título
     document.getElementById("titulo-ejercicio").textContent = data.titulo;
 
-    // Video
-    const contenedorDemo = document.getElementById("imagen-ejercicio");
-    contenedorDemo.outerHTML = `
-        <video class="img-demo" controls>
+    // Video dinámico
+    document.getElementById("video-container").innerHTML = `
+        <video id="video-ejercicio" class="img-demo" controls>
             <source src="${data.video}" type="video/mp4">
             Tu navegador no soporta video.
         </video>
@@ -263,15 +269,15 @@ if (ejercicios[ejercicio]) {
     document.getElementById("titulo-ejercicio").textContent = "Ejercicio no encontrado.";
 }
 
-// ------------------------ BOTÓN INICIAR ------------------------
 
-// Esto hace que el botón lleve a pages/ejecucion.html (misma carpeta que demostracion.html)
+// ===============================================================
+//     BOTÓN INICIAR → ejecución.html
+// ===============================================================
+
 const btnIniciar = document.getElementById("btnIniciar");
+
 if (btnIniciar) {
     btnIniciar.addEventListener("click", () => {
-        // Como demostracion.html está en /pages/, usamos ruta relativa al mismo folder:
-       window.location.href = `ejecucion.html?ejercicio=${ejercicio}`;
-
-        // Si por alguna razón tu archivo estuviera en otra ruta, aquí cambiarías la URL.
+        window.location.href = `ejecucion.html?ejercicio=${ejercicio}`;
     });
 }

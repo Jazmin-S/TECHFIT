@@ -1,29 +1,19 @@
-const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
-const closeSidebar = document.getElementById("closeSidebar");
 const overlay = document.getElementById("overlay");
-const logoutBtn = document.getElementById("logoutBtn");
+const menuBtn = document.getElementById("menuBtn");
+const closeSidebar = document.getElementById("closeSidebar");
 
-// Abrir menú
 menuBtn.addEventListener("click", () => {
-    sidebar.classList.add("open");
-    overlay.classList.add("show");
+    sidebar.classList.add("active");
+    overlay.classList.add("active");
 });
 
-// Cerrar menú
 closeSidebar.addEventListener("click", () => {
-    sidebar.classList.remove("open");
-    overlay.classList.remove("show");
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
 });
 
-// Cerrar al tocar afuera
 overlay.addEventListener("click", () => {
-    sidebar.classList.remove("open");
-    overlay.classList.remove("show");
-});
-
-// Logout
-logoutBtn.addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "../index.html";
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
 });

@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejecución | TECHFIT</title>
     <link rel="stylesheet" href="../css/ejecucion.css">
 </head>
@@ -11,25 +12,12 @@
 <h2 id="nombre-ejercicio" class="subtitle"></h2>
 
 <div class="camera-container">
-    <video id="video" autoplay playsinline></video>
+    <video id="video" autoplay playsinline muted></video>
     <canvas id="poseCanvas"></canvas>
 </div>
 
 <p id="status" class="mensaje">Preparando cámara e IA...</p>
-
 <p id="feedback" class="retro"></p>
-<p id="feedback" class="retro"></p>
-
-<div class="chat-container">
-  <h3>Chat con tu entrenador AI</h3>
-  <div id="chat-messages" class="chat-messages"></div>
-  <div class="chat-input-row">
-      <input id="chat-input" type="text" placeholder="Escribe tu duda sobre el ejercicio...">
-      <button id="chat-send">Enviar</button>
-  </div>
-  <button id="btnVoice" class="voice-btn">🎤 Comandos de voz</button>
-</div>
-
 
 <div id="countdown" class="counter"></div>
 <div id="timer" class="timer"></div>
@@ -69,14 +57,36 @@
     <button id="btnDetener">Detener</button>
 </div>
 
+<!-- BOTÓN FLOTANTE -->
+<button id="voiceHelpBtn" class="voice-btn">🎤 Comandos & Modos</button>
+
+<!-- PANEL FLOTANTE -->
+<div id="voiceCommandsPanel" class="voice-panel">
+    <h3>🎤 Comandos</h3>
+    <ul>
+        <li>"Pausar"</li>
+        <li>"Seguir / Reanudar"</li>
+        <li>"Detener"</li>
+        <li>"Tiempo"</li>
+        <li>"Salir"</li>
+    </ul>
+
+    <h3>🎮 Modos especiales</h3>
+    <ul>
+        <li>"Modo intenso"</li>
+        <li>"Modo recuperativo"</li>
+        <li>"Modo nocturno / modo oscuro"</li>
+        <li>"Modo silencioso"</li>
+        <li>"Modo normal"</li>
+    </ul>
+</div>
 
 <!-- IA -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@2.0.0/dist/pose-detection.min.js"></script>
 
 <script src="../js/camara.js"></script>
-<script src="../js/voice-core.js"></script>
+<script src="../js/voice-ejecucion.js"></script>
 
 </body>
 </html>

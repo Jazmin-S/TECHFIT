@@ -1,61 +1,51 @@
-// ==========================
-//   SISTEMA GLOBAL DE VOZ
-// ==========================
-
 let globalVoiceActive = false;
 let recognition = null;
 
-// Comandos globales
-const globalCommands = [
-    { words: ["inicio", "home"], action: () => goTo("home.html") },
-    { words: ["catálogo", "catalogo"], action: () => goTo("catalogo.html") },
-    { words: ["perfil"], action: () => goTo("perfil.html") },
-    { words: ["cerrar sesión", "logout", "salir"], action: () => goTo("index.html") },
-    { words: ["abrir menú", "mostrar menú"], action: openMenu },
-    { words: ["cerrar menú", "ocultar menú"], action: closeMenu },
-    { words: ["subir"], action: () => window.scrollBy(0, -300) },
-    { words: ["bajar"], action: () => window.scrollBy(0, 300) },
-    { words: ["arriba"], action: () => window.scrollTo(0, 0) },
-    { words: ["abajo"], action: () => window.scrollTo(0, document.body.scrollHeight) },
-];
+// Lista de ejercicios y rutas
+const ejerciciosVoz = {
+    "sentadillas": "demostracion.html?ejercicio=sentadillas",
+    "desplantes": "demostracion.html?ejercicio=desplantes",
+    "elevaciones de brazo": "demostracion.html?ejercicio=elevaciones_brazo",
+    "flexiones de pared": "demostracion.html?ejercicio=flexiones_pared",
+    "plancha": "demostracion.html?ejercicio=plancha",
+    "elevación de rodillas": "demostracion.html?ejercicio=rodillas",
+    "jumping jacks": "demostracion.html?ejercicio=jumping",
+    "elevaciones laterales de pierna": "demostracion.html?ejercicio=pierna"
+};
 
-// Funciones auxiliares
-function goTo(page) {
-    window.location.href = page;
-}
-
-function openMenu() {
-    const menu = document.querySelector(".menu");
-    if (menu) menu.classList.add("open");
-}
-
-function closeMenu() {
-    const menu = document.querySelector(".menu");
-    if (menu) menu.classList.remove("open");
-}
-
-// Inicialización
 function initVoiceCore() {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
-        console.warn("Reconocimiento de voz no soportado");
+        console.log("Voz no soportada");
         return;
     }
 
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();
-
-    recognition.continuous = true;
     recognition.lang = "es-MX";
+    recognition.continuous = true;
     recognition.interimResults = false;
 
     recognition.onresult = (event) => {
-        const result = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
-        console.log("🎤 Comando global:", result);
+        const result = event.results[event.results.length - 1][0].transcript.toLowerCase();
+        console.log("Comando:", result);
 
-        for (const cmd of globalCommands) {
-            if (cmd.words.some(w => result.includes(w))) {
-                cmd.action();
-                return;
+        // ----------- COMANDOS DE MENÚ -----------
+        if (result.includes("abrir menú")) sidebar.classList.add("active");
+        if (result.includes("cerrar menú")) sidebar.classList.remove("active");
+
+        if (result.includes("perfil")) window.location.href = "perfil.html";
+        if (result.includes("cerrar sesión") || result.includes("inicio")) window.location.href = "../index.html";
+
+        if (result.includes("subir")) window.scrollBy(0, -300);
+        if (result.includes("bajar")) window.scrollBy(0, 300);
+
+        // ----------- 🟦 NUEVO: INICIAR EJERCICIO -----------
+        if (result.includes("iniciar ejercicio")) {
+            for (let nombre in ejerciciosVoz) {
+                if (result.includes(nombre)) {
+                    window.location.href = ejerciciosVoz[nombre];
+                    return;
+                }
             }
         }
     };
@@ -65,32 +55,8 @@ function initVoiceCore() {
     };
 }
 
-function startGlobalVoice() {
-    if (globalVoiceActive) return;
-    globalVoiceActive = true;
-    recognition.start();
-}
-
-function stopGlobalVoice() {
-    globalVoiceActive = false;
-    recognition.stop();
-}
-
-
-// Inicia automáticamente en todas las páginas después de login:
 document.addEventListener("DOMContentLoaded", () => {
     initVoiceCore();
-    startGlobalVoice();
-});
-
-document.getElementById("btnVoiceChat").addEventListener("click", () => {
-    if (!recognition) return;
-    speakCoach("Te escucho...");
-    recognition.onresult = (event) => {
-        const text = event.results[event.results.length - 1][0].transcript;
-        addChatMessage("user", text);
-        const reply = getCoachReply(text);
-        addChatMessage("coach", reply);
-        speakCoach(reply);
-    };
+    globalVoiceActive = true;
+    recognition.start();
 });

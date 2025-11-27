@@ -1,26 +1,124 @@
-window.addEventListener("DOMContentLoaded", () => {
-    if (!("webkitSpeechRecognition" in window)) return;
+// =====================================================
+//   VOZ DEMOSTRACIÓN REHABILITACIÓN
+//   Comandos:
+//     - "iniciar ejercicio"
+//     - "pausar video" / "reproducir video"
+//     - "salir"
+// =====================================================
 
-    const reco = new webkitSpeechRecognition();
-    reco.lang = "es-MX";
-    reco.continuous = true;
+(function () {
 
-    reco.onresult = (event) => {
-        const txt = event.results[event.results.length - 1][0].transcript.toLowerCase();
-        console.log("Voz rehab:", txt);
+    // Solo ejecutar en la página de demostración
+    const tituloDemo = document.getElementById("titulo-ejercicio");
+    const video = document.getElementById("video-ejercicio");
+    const btnIniciar = document.getElementById("btnIniciar");
 
-        if (txt.includes("hombro_banda")) window.location.href = "/pages/demostracion.html?ejercicio=hombro_banda";
-        if (txt.includes("pierna")) window.location.href = "/pages/demostracion.html?ejercicio=elevacion_pierna_rehab";
-        if (txt.includes("caminata")) window.location.href = "/pages/demostracion.html?ejercicio=caminata_banda";
-        if (txt.includes("rodilla")) window.location.href = "/pages/demostracion.html?ejercicio=rodilla_rehab";
-        if (txt.includes("lumbar")) window.location.href = "/pages/demostracion.html?ejercicio=lumbar";
-        if (txt.includes("tobillo")) window.location.href = "/pages/demostracion.html?ejercicio=tobillo_rehab";
+    if (!tituloDemo || !video || !btnIniciar) {
+        console.warn("voz_demostracion_rehab.js: no es la página de demostración, se omite.");
+        return;
+    }
 
-        if (txt.includes("abrir menú")) document.getElementById("menuBtn").click();
-        if (txt.includes("cerrar menú")) document.getElementById("closeSidebar").click();
-        if (txt.includes("perfil")) window.location.href = "/pages/perfil.html";
-        if (txt.includes("cerrar sesión")) document.getElementById("logoutBtn").click();
+    if (!window.infoRehab) {
+        console.warn("voz_demostracion_rehab.js: infoRehab no está disponible.");
+    }
+
+    // Web Speech API
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        console.warn("Este navegador no soporta reconocimiento de voz.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "es-MX";
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    let escuchando = false;
+
+    function iniciarEscucha() {
+        if (!escuchando) {
+            try {
+                recognition.start();
+                escuchando = true;
+                console.log("🎤 Reconocimiento de voz iniciado (rehab).");
+            } catch (e) {
+                console.warn("No se pudo iniciar reconocimiento:", e);
+            }
+        }
+    }
+
+    function detenerEscucha() {
+        if (escuchando) {
+            recognition.stop();
+            escuchando = false;
+            console.log("🎤 Reconocimiento de voz detenido (rehab).");
+        }
+    }
+
+    // Obtener ejercicio actual
+    function obtenerEjercicioActual() {
+        const q = new URLSearchParams(window.location.search);
+        const ej = q.get("ejercicio");
+        if (!window.infoRehab) return null;
+        return window.infoRehab[ej] || null;
+    }
+
+    function procesarComando(texto) {
+        const comando = texto.toLowerCase();
+        console.log("🗣 Comando detectado:", comando);
+
+        // Iniciar ejercicio (ir a ejecución)
+        if (comando.includes("iniciar ejercicio")) {
+            btnIniciar.click();
+            return;
+        }
+
+        // Pausar / reproducir video
+        if (comando.includes("pausar") || comando.includes("poner pausa")) {
+            video.pause();
+            return;
+        }
+
+        if (comando.includes("reproducir") || comando.includes("reanudar") || comando.includes("play")) {
+            video.play();
+            return;
+        }
+
+        // Salir (regresar al catálogo)
+        if (comando.includes("salir")) {
+            window.location.href = "/pages/Catalogos/catalogo_rehabilitacion.html";
+            return;
+        }
+    }
+
+    recognition.onresult = (event) => {
+        const results = event.results;
+        const last = results[results.length - 1];
+        const texto = last[0].transcript.trim();
+        procesarComando(texto);
     };
 
-    reco.start();
-});
+    recognition.onerror = (event) => {
+        console.warn("Error en reconocimiento de voz:", event.error);
+        // Si se cortó, intentar reanudar para que quede siempre activo
+        if (event.error === "no-speech" || event.error === "network") {
+            detenerEscucha();
+            setTimeout(iniciarEscucha, 1000);
+        }
+    };
+
+    recognition.onend = () => {
+        // Mantener siempre escuchando
+        if (escuchando) {
+            setTimeout(iniciarEscucha, 300);
+        }
+    };
+
+    // Iniciar automáticamente al cargar la página
+    window.addEventListener("load", () => {
+        iniciarEscucha();
+    });
+
+})();

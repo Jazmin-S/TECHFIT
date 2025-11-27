@@ -1,30 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>TECHFIT - Demostración Rehabilitación</title>
-    <link rel="stylesheet" href="/css/General/demostracion.css">
-</head>
+    <meta charset="UTF-8" />
+    <title>TECHFIT - Rehabilitación - Demostración</title>
 
+    <!-- Estilos (ajusta la ruta si tu CSS está en otro lado) -->
+    <link rel="stylesheet" href="/css/General/demostracion.css" />
+</head>
 <body>
 
+    <!-- NAVBAR SUPERIOR -->
     <nav class="navbar">
-        <button class="back-btn" onclick="window.location.href='/pages/Catalogos/catalogo_rehabilitacion.html'">←</button>
+        <button class="back-btn"
+                type="button"
+                onclick="window.location.href='/pages/Catalogos/catalogo_rehabilitacion.html'">
+            ←
+        </button>
+
         <h1 class="header-title">Rehabilitación - Demostración</h1>
-        <img id="miniPerfil" class="perfil-mini" src="/img/user_default.png" onclick="window.location.href='/pages/perfil.html'">
+
+        <img id="miniPerfil"
+             class="perfil-mini"
+             src="/img/user_default.png"
+             alt="Perfil"
+             onclick="window.location.href='/pages/perfil.html'" />
     </nav>
 
+    <!-- CONTENEDOR PRINCIPAL -->
     <section class="demo-container">
 
+        <!-- COLUMNA IZQUIERDA: VIDEO -->
         <div class="video-box">
             <h2 id="titulo-ejercicio">Ejercicio</h2>
+
+            <!-- IMPORTANTE: sin src ni <source>, lo pone el JS -->
             <video id="video-ejercicio" controls></video>
 
-            <button class="btn-iniciar" id="btnIniciar">
+            <button class="btn-iniciar" id="btnIniciar" type="button">
                 Iniciar ejercicio
             </button>
         </div>
 
+        <!-- COLUMNA DERECHA: INSTRUCCIONES / TIEMPO / BENEFICIOS -->
         <div class="instr-box">
             <h3>Instrucciones</h3>
             <ol id="lista-instrucciones"></ol>
@@ -42,23 +59,28 @@
 
     </section>
 
-    <button class="voice-btn" onclick="toggleVoicePanel()">🎤 Comandos</button>
+    <!-- BOTÓN FLOTANTE DE COMANDOS DE VOZ -->
+    <button class="voice-btn" type="button" onclick="toggleVoicePanel()">
+        🎤 Comandos
+    </button>
 
     <div id="voicePanel" class="voice-panel">
-        <h4>Comandos disponibles:</h4>
+        <h4>Comandos disponibles</h4>
         <ul>
             <li>“Iniciar ejercicio”</li>
-            <li>“Pausar / Reproducir video”</li>
+            <li>“Pausar video” / “Reproducir video”</li>
             <li>“Salir”</li>
         </ul>
     </div>
 
-    <script src="/js/voice/voz_demostracion_rehab.js"></script>
+    <!-- SCRIPTS (IMPORTANTE: PRIMERO DEMOSTRACIÓN, LUEGO VOZ) -->
     <script src="/js/Rehabilitacion/demostracion_rehab.js"></script>
+    <script src="/js/voice/voz_demostracion_rehab.js"></script>
 
     <script>
         function toggleVoicePanel() {
-            document.getElementById("voicePanel").classList.toggle("active");
+            const panel = document.getElementById("voicePanel");
+            panel.classList.toggle("active");
         }
     </script>
 

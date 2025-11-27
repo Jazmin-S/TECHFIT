@@ -1,33 +1,28 @@
 const ejercicios_rehab = [
     { 
-        nombre: "Movilidad de hombro con banda", 
-        img: "/img/hombro_banda.jpg", 
-        ruta: "/pages/demostracion_rehabilitacion.html?ejercicio=hombro_banda" 
-    },
-    { 
         nombre: "Elevación de pierna acostado", 
         img: "/img/elevacion_pierna.jpg", 
         ruta: "/pages/demostracion_rehabilitacion.html?ejercicio=elevacion_pierna_rehab" 
     },
     { 
         nombre: "Caminata lateral con banda", 
-        img: "/img/rehab/caminata_banda.jpg", 
+        img: "/img/caminata_banda.jpg", 
         ruta: "/pages/demostracion_rehabilitacion.html?ejercicio=caminata_banda" 
     },
     { 
         nombre: "Extensión de rodilla", 
-        img: "/img/rehab/rodilla.jpg", 
-        ruta: "/pages/demostracion.html?ejercicio=rodilla_rehab" 
+        img: "/img/rodilla.jpg", 
+        ruta: "/pages/demostracion_rehabilitacion.html?ejercicio=rodilla_rehab" 
     },
     { 
         nombre: "Estiramiento lumbar", 
-        img: "/img/rehab/lumbar.jpg", 
-        ruta: "/pages/demostracion.html?ejercicio=lumbar" 
+        img: "/img/lumbar.jpg", 
+        ruta: "/pages/demostracion_rehabilitacion.html?ejercicio=lumbar" 
     },
     { 
         nombre: "Movilidad de tobillo", 
-        img: "/img/rehab/tobillo.jpg", 
-        ruta: "/pages/demostracion.html?ejercicio=tobillo_rehab" 
+        img: "/img/tobillo.jpg", 
+        ruta: "/pages/demostracion_rehabilitacion.html?ejercicio=tobillo_rehab" 
     }
 ];
 

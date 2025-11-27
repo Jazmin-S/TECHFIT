@@ -52,13 +52,26 @@ body {
     box-shadow: 0 0 35px rgba(0, 110, 255, 0.35);
 }
 
-/* VIDEO + CANVAS */
 .camera-wrapper {
     position: relative;
     width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+
+    /* Esto hace que se vea un poco más lejos (más pequeño dentro del contenedor) */
     display: flex;
+    align-items: center;
     justify-content: center;
 }
+
+.camera-wrapper video,
+.camera-wrapper canvas {
+    width: 80%;          /* Baja este número para “alejar” más (70%, 60%, etc.) */
+    height: auto;
+}
+
 
 #video {
     width: 100%;

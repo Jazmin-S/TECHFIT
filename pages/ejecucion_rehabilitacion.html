@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>TECHFIT - Rehabilitación - Ejecución</title>
+
+    <!-- CSS de la pantalla de ejecución -->
+    <link rel="stylesheet" href="/css/General/ejecucion.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <button class="back-btn"
+                type="button"
+                onclick="window.location.href='/pages/Catalogos/catalogo_rehabilitacion.html'">
+            ←
+        </button>
+
+        <h1 class="header-title">Rehabilitación - Ejecución</h1>
+
+        <img id="miniPerfil"
+             class="perfil-mini"
+             src="/img/user_default.png"
+             alt="Perfil"
+             onclick="window.location.href='/pages/perfil.html'" />
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <section class="exec-container">
+
+        <!-- TARJETA CÁMARA -->
+        <div class="camera-card">
+            <h2 id="titulo-ejercicio">Ejercicio de rehabilitación</h2>
+
+            <div class="camera-wrapper">
+                <!-- video de la cámara -->
+                <video id="video" autoplay muted playsinline></video>
+                <!-- canvas para IA -->
+                <canvas id="poseCanvas"></canvas>
+            </div>
+
+            <!-- HUD -->
+            <div class="hud">
+                <div class="hud-item">Reps: <span id="reps">0</span></div>
+                <div class="hud-item">Tiempo: <span id="tiempo">00:00</span></div>
+                <div class="hud-item">Estado: <span id="estado">En espera</span></div>
+            </div>
+
+            <!-- LUCES -->
+            <div class="lights">
+                <div class="light ok" id="light-ok"></div>
+                <div class="light bad" id="light-bad"></div>
+            </div>
+
+            <!-- FEEDBACK -->
+            <div class="feedback" id="feedback">
+                Ejercicio listo para comenzar.
+            </div>
+
+            <!-- TIMER HIIT -->
+            <div class="hiit-timer">
+                Intervalo: <span id="hiit-phase">Preparado</span> —
+                <span id="hiit-time">00:00</span>
+            </div>
+
+            <!-- ejercicio actual para otros JS -->
+            <input type="hidden" id="ejercicio-actual" value="">
+        </div>
+
+        <!-- TARJETA CONTROLES -->
+        <div class="controls-card">
+            <button id="btnIniciarEj" type="button">Iniciar</button>
+            <button id="btnPausarEj" type="button">Pausar</button>
+            <button id="btnReiniciarEj" type="button">Reiniciar</button>
+            <button id="btnSalirEj" type="button">Salir</button>
+
+            <!-- panel de voz (listo por si luego lo usas) -->
+            <div id="voicePanel" class="voice-panel">
+                <p><strong>Comandos (futuros):</strong></p>
+                <ul>
+                    <li>“Iniciar ejercicio”</li>
+                    <li>“Pausar ejercicio” / “Reanudar ejercicio”</li>
+                    <li>“Reiniciar ejercicio”</li>
+                    <li>“Salir”</li>
+                </ul>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- MODAL DE SALIDA -->
+    <div id="exitModal" class="exit-modal hidden">
+        <div class="exit-modal-content">
+            <h3>¿Deseas salir del ejercicio?</h3>
+            <p>Puedes continuar o regresar al catálogo de rehabilitación.</p>
+            <div class="modal-buttons">
+                <button id="seguirBtn">Seguir</button>
+                <button id="salirBtn" class="danger">Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS DE LA PÁGINA -->
+    <script src="/js/Rehabilitacion/ejecucion_rehab.js"></script>
+
+    <!-- IA de pose desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"
+            crossorigin="anonymous"></script>
+
+    <!-- Cámara + IA para rehabilitación -->
+    <script src="/js/Rehabilitacion/camara_rehab.js"></script>
+
+</body>
+</html>

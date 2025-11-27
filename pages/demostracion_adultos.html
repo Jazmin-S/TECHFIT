@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>TECHFIT - Demostración Adultos</title>
+    <link rel="stylesheet" href="/css/General/demostracion.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <button class="back-btn" onclick="window.location.href='/pages/Catalogos/catalogo_adultos.html'">←</button>
+        <h1 class="header-title">Adulto mayor - Demostración</h1>
+        <img id="miniPerfil" class="perfil-mini" src="/img/user_default.png" onclick="window.location.href='/pages/perfil.html'">
+    </nav>
+
+    <section class="demo-container">
+
+        <div class="video-box">
+            <h2 id="titulo-ejercicio" class="titulo-ejercicio">Ejercicio</h2>
+            <video id="video-ejercicio" controls></video>
+
+            <button class="btn-iniciar" id="btnIniciar">
+                Iniciar ejercicio
+            </button>
+        </div>
+
+        <div class="instr-box">
+            <h3>Instrucciones</h3>
+            <ol id="lista-instrucciones"></ol>
+
+            <h3>Tiempo recomendado</h3>
+            <ul>
+                <li><strong>Principiante:</strong> <span id="tiempo-principiante"></span></li>
+                <li><strong>Moderado:</strong> <span id="tiempo-intermedio"></span></li>
+                <li><strong>Seguro:</strong> <span id="tiempo-avanzado"></span></li>
+            </ul>
+
+            <h3>Beneficios</h3>
+            <ul id="beneficios"></ul>
+        </div>
+
+    </section>
+
+    <button class="voice-btn" onclick="toggleVoicePanel()">🎤 Comandos</button>
+
+    <div id="voicePanel" class="voice-panel">
+        <h4>Comandos disponibles:</h4>
+        <ul>
+            <li>“Iniciar ejercicio”</li>
+            <li>“Reproducir / Pausar video”</li>
+            <li>“Salir”</li>
+        </ul>
+    </div>
+
+    <script src="/js/voice/voz_demostracion_adultos.js"></script>
+    <script src="/js/Adultos/demostracion_adultos.js"></script>
+
+    <script>
+        function toggleVoicePanel() {
+            document.getElementById("voicePanel").classList.toggle("active");
+        }
+    </script>
+
+</body>
+</html>

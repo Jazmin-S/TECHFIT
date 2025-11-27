@@ -3,40 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Mi Perfil - TECHFIT</title>
-
-    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="/css/perfil.css">
 </head>
+
 <body>
 
-<!-- Encabezado -->
-<header class="header">
-    <a href="catalogo.html" class="btn-volver">← Volver</a>
-    <h1 class="title">TECHFIT</h1>
-</header>
+<nav class="navbar">
+    <button class="back-btn" onclick="window.location.href='/pages/Catalogos/catalogo.html'">←</button>
+    <h1 class="header-title">Perfil en TECHFIT</h1>
+</nav>
 
-<!-- Contenedor del perfil -->
-<div class="perfil-container">
+<div class="profile-container">
 
-    <!-- Foto de perfil -->
-    <div class="foto-container">
-        <img id="fotoPerfil" src="../img/user_default.png" alt="Foto de perfil">
-    </div>
+    <img id="perfil-img" src="/img/user_default.png" alt="Foto de perfil">
+    <input type="file" id="inputFoto" accept="image/*">
 
-    <h2 id="nombreUsuario" class="nombre"></h2>
-
-    <p id="descripcionUsuario" class="descripcion">
-        Usuario activo en TECHFIT. Entrenamientos personalizados según su tipo.
-    </p>
-
-    <div class="perfil-card">
+    <div class="profile-data">
+        <p><strong>Nombre:</strong> <span id="nombreUsuario"></span></p>
         <p><strong>Correo:</strong> <span id="correoUsuario"></span></p>
-        <p><strong>Tipo de usuario:</strong> <span id="tipoUsuario"></span></p>
-        <p><strong>Fecha de registro:</strong> <span id="fechaRegistro"></span></p>
+        <p><strong>Tipo de Usuario:</strong> <span id="tipoUsuario"></span></p>
+        <p><strong>Registrado el:</strong> <span id="fechaRegistro"></span></p>
     </div>
+
+    <button class="btnPerfil" onclick="cerrarSesion()">Cerrar sesión</button>
+
 </div>
 
-<script src="../js/perfil.js"></script>
-<script src="../js/voice-core.js"></script>
-
+<script src="/js/perfil.js"></script>
 </body>
 </html>

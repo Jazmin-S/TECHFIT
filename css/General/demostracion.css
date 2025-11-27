@@ -1,0 +1,161 @@
+/* ======== NAV ======== */
+.navbar {
+    background: #0e6fb5;
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.back-btn {
+    font-size: 22px;
+    background: white;
+    padding: 5px 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.perfil-mini {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    object-fit: cover;
+}
+
+/* ======== LAYOUT ======== */
+.demo-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 30px;
+    gap: 35px;
+}
+
+/* ======== TARJETAS (UNIFICADO) ======== */
+.video-box,
+.instr-box {
+    background: white;
+    padding: 28px;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+}
+
+/* ======== VIDEO ======== */
+#video-ejercicio {
+    width: 100%;
+    border-radius: 14px;
+    margin: 10px 0 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* ======== TITULOS ======== */
+.titulo-ejercicio {
+    font-size: 26px;
+    margin-bottom: 15px;
+    font-weight: 800;
+}
+
+.instr-box h3 {
+    font-size: 22px;
+    margin-top: 15px;
+    margin-bottom: 12px;
+}
+
+/* ======== LISTAS ======== */
+#lista-instrucciones,
+#beneficios,
+#tiempos-nivel {
+    margin-left: 20px;
+    line-height: 1.6;
+    font-size: 17px;
+}
+
+#tiempos-nivel li,
+#beneficios li {
+    margin-bottom: 8px;
+}
+
+/* ======== BOTÓN ======== */
+.btn-iniciar {
+    margin-top: auto;
+    padding: 14px 22px;
+    background: #0e6fb5;
+    color: white;
+    border: none;
+    font-size: 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 25px;
+}
+
+.btn-iniciar:hover {
+    background: #095892;
+}
+
+/* ======== COMANDOS ======== */
+.voice-btn {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    background: #0e6fb5;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 26px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 5000;
+}
+
+.voice-panel {
+    position: fixed;
+    right: 25px;
+    bottom: 90px;
+    width: 260px;
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: .3s ease;
+    z-index: 5000;
+}
+
+.voice-panel.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.voice-panel li {
+    padding: 8px;
+    background: #e6f1ff;
+    border-left: 4px solid #0e6fb5;
+    margin-bottom: 8px;
+    border-radius: 6px;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+    .demo-container {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-iniciar {
+        width: 100%;
+    }
+}

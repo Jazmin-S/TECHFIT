@@ -2,70 +2,96 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Demostración</title>
-    <link rel="stylesheet" href="../css/demostracion.css">
+    <title>TECHFIT - Demostración</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/General/demostracion.css">
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav class="navbar">
-    <button class="btn-back" onclick="window.location.href='catalogo.html'">←</button>
-    <h1 class="header-title">TECHFIT</h1>
-    <div style="width:45px;height:45px;"></div>
-</nav>
+    <!-- NAV BAR -->
+    <nav class="navbar">
 
-<div class="contenedor">
+        <!-- Botón de regresar -->
+        <button class="back-btn" onclick="window.location.href='/pages/Catalogos/catalogo.html'">←</button>
 
-    <!-- TÍTULO -->
-    <h1 id="titulo-ejercicio" class="titulo-ejercicio"></h1>
+        <!-- Título -->
+        <h1 class="header-title">TECHFIT - Demostración</h1>
 
-    <div class="grid-demo">
+        <!-- Foto de perfil mini -->
+        <img id="miniPerfil" class="perfil-mini" src="/img/user_default.png" onclick="window.location.href='/pages/perfil.html'">
+    </nav>
 
-        <!-- INSTRUCCIONES -->
-        <div class="columna instrucciones">
-            <h2>Instrucciones</h2>
-            <ul id="lista-instrucciones"></ul>
-        </div>
+    <!-- CONTENIDO PRINCIPAL -->
+    <section class="demo-container">
 
         <!-- VIDEO -->
-        <div class="columna demostracion">
-            <h2>Demostración</h2>
-            <div id="video-container"></div>
+        <div class="video-box">
+            <h2 id="titulo-ejercicio" class="titulo-ejercicio">Ejercicio</h2>
+
+            <video id="video-ejercicio" controls></video>
+
+            <!-- BOTÓN INICIAR SIN VOZ -->
+            <button class="btn-iniciar" onclick="window.location.href='/pages/ejecucion.html?ejercicio='+new URLSearchParams(window.location.search).get('ejercicio')">
+                Iniciar ejercicio
+            </button>
+
         </div>
 
-        <!-- DURACIÓN Y BENEFICIOS -->
-        <div class="columna duracion">
-            <h2>Duración</h2>
-            <p id="texto-duracion"></p>
+        <!-- TARJETA DERECHA COMPLETA -->
+        <div class="instr-box">
 
-            <h2>Beneficios</h2>
-            <ul id="lista-beneficios"></ul>
+            <!-- INSTRUCCIONES -->
+            <h3>Instrucciones</h3>
+            <ol id="lista-instrucciones"></ol>
+
+            <!-- TIEMPO POR NIVELES -->
+            <h3>Tiempo recomendado</h3>
+            <ul id="tiempos-nivel">
+                <li><strong>Principiante:</strong> <span id="tiempo-principiante"></span></li>
+                <li><strong>Intermedio:</strong> <span id="tiempo-intermedio"></span></li>
+                <li><strong>Avanzado / Experto:</strong> <span id="tiempo-avanzado"></span></li>
+            </ul>
+
+            <!-- BENEFICIOS -->
+            <h3>Beneficios del ejercicio</h3>
+            <ul id="beneficios"></ul>
         </div>
+
+    </section>
+
+    <!-- BOTÓN DE COMANDOS -->
+    <button class="voice-btn" onclick="toggleVoicePanel()">🎤 Comandos</button>
+
+    <!-- PANEL DE COMANDOS -->
+    <div id="voicePanel" class="voice-panel">
+        <h4>Comandos disponibles:</h4>
+        <ul>
+            <li>“Iniciar ejercicio”</li>
+            <li>“Reproducir / pausar video”</li>
+            <li>“subir / bajar volumen”</li>
+            <li>“Explicar ejercicio”</li>
+            <li>“Salir”</li>
+        </ul>
     </div>
 
-    <button id="btnIniciar" class="btn-iniciar">Iniciar ejercicio</button>
-</div>
+    <!-- JS -->
+    <script src="/js/voice-demostracion.js"></script>
+    <script src="/js/demostracion.js"></script>
 
-<!-- BOTÓN DE COMANDOS -->
-<button id="btnVoicePanel" class="voice-btn">🎤 Comandos</button>
+    <script>
+        // Mini foto de perfil (si el usuario subió una)
+        let fotoMini = localStorage.getItem("fotoPerfil");
+        if (fotoMini) {
+            document.getElementById("miniPerfil").src = fotoMini;
+        }
 
-<!-- PANEL -->
-<div id="voicePanel" class="voice-panel">
-    <h3>🎤 Comandos disponibles</h3>
-    <ul>
-        <li>“Iniciar ejercicio”</li>
-        <li>“Reproducir video”</li>
-        <li>“Pausar video”</li>
-        <li>“Subir volumen”</li>
-        <li>“Bajar volumen”</li>
-        <li>“Explicar ejercicio”</li>
-        <li>“Salir”</li>
-    </ul>
-    <p class="tip">Micrófono activo</p>
-</div>
-
-<script src="../js/demostracion.js"></script>
-<script src="../js/voice-demostracion.js"></script>
+        // Toggle del panel de comandos
+        function toggleVoicePanel() {
+            document.getElementById("voicePanel").classList.toggle("active");
+        }
+    </script>
 
 </body>
 </html>

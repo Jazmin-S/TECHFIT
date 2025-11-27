@@ -1,0 +1,281 @@
+body {
+    background: radial-gradient(circle at top, #0a1c2e, #07101c 80%);
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    color: #d7ecff;
+}
+
+.navbar {
+    background: #0e6fb5;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-btn {
+    background: white;
+    border: none;
+    padding: 7px 16px;
+    font-size: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.header-title {
+    color: white;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.perfil-mini {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid white;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.exec-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+/* TARJETA DE CÁMARA */
+.camera-card {
+    background: rgba(20, 30, 50, 0.6);
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 0 35px rgba(0, 110, 255, 0.35);
+}
+
+/* VIDEO + CANVAS */
+.camera-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#video {
+    width: 100%;
+    border-radius: 18px;
+    border: 3px solid #4ca3ff;
+    box-shadow: 0 0 30px rgba(76,163,255,0.4);
+}
+
+#poseCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* HUD */
+.hud {
+    margin-top: 18px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.hud-item {
+    background: rgba(0, 40, 80, 0.45);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 18px;
+}
+
+/* LUCES */
+.lights {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    gap: 20px;
+}
+
+.light {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    opacity: 0.3;
+}
+
+.light.ok { background: #00ffa6; }
+.light.bad { background: #ff4646; }
+
+/* FEEDBACK */
+.feedback {
+    font-size: 20px;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #6eeaff;
+}
+
+/* HIIT TIMER */
+.hiit-timer {
+    margin-top: 20px;
+    text-align: center;
+    background: rgba(0, 50, 80, 0.5);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,150,255,0.3);
+}
+
+#hiit-time {
+    font-size: 28px;
+    font-weight: 700;
+    color: #6eeaff;
+}
+
+/* TARJETA DE CONTROLES */
+.controls-card {
+    background: rgba(20, 30, 50, 0.65);
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 0 35px rgba(76,163,255,0.25);
+}
+
+.controls-card button {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 14px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #1476ff;
+    color: white;
+    font-weight: 600;
+}
+
+.controls-card button:hover {
+    background: #0d59c9;
+}
+
+.voice-panel {
+    display: none;
+    background: rgba(0, 25, 50, 0.85);
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid #4ca3ff;
+    margin-top: 15px;
+}
+
+.voice-panel.active {
+    display: block;
+}
+
+/* RESPONSIVE */
+@media (max-width: 950px) {
+    .exec-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.exit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.exit-modal.hidden {
+    display: none;
+}
+
+.exit-modal-content {
+    background: #ffffff;
+    padding: 20px 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 300px;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#seguirBtn, #salirBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#seguirBtn {
+    background: #38c172;
+    color: white;
+}
+
+#salirBtn.danger {
+    background: #e3342f;
+    color: white;
+}
+/* =============== MODAL DE SALIDA =============== */
+
+.exit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+.exit-modal.hidden {
+    display: none;
+}
+
+.exit-modal-content {
+    background: #0a1b2a;
+    padding: 25px 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 300px;
+    color: white;
+    box-shadow: 0 0 15px #00eaff;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#seguirBtn, #salirBtn {
+    width: 48%;
+    padding: 10px 10px;
+    font-size: 17px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#seguirBtn {
+    background: #00c36d;
+    color: white;
+}
+
+#salirBtn.danger {
+    background: #ff3c3c;
+    color: white;
+}

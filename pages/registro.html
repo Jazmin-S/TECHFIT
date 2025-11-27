@@ -3,51 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>TECHFIT - Crear cuenta</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
-<div class="header">
-    <h1>TECHFIT</h1>
+<div class="login-wrapper">
+
+    <div class="login-card animate">
+
+        <h1 class="logo">TECHFIT</h1>
+        <p class="subtitle">Crea tu cuenta </p>
+
+        <form id="formRegistro">
+
+            <label>Nombre completo</label>
+            <input type="text" name="nombre" placeholder="Tu nombre" required>
+
+            <label>Correo electrónico</label>
+            <input type="email" name="correo" placeholder="ejemplo@gmail.com" required>
+
+            <label>Contraseña</label>
+            <div class="password-wrapper">
+                <input id="regPass" type="password" name="contrasena" placeholder="Tu contraseña" required>
+                <span class="toggle-pass" onclick="toggleRegPass()">👁</span>
+            </div>
+
+            <ul id="passGuide">
+                <li id="len">Debe tener exactamente 8 caracteres</li>
+                <li id="mayus">Debe incluir una mayúscula</li>
+                <li id="especial">Debe incluir un carácter especial @#$%&*!?</li>
+            </ul>
+
+            <label>Tipo de usuario</label>
+            <select name="tipo" required>
+                <option value="general">Ejercicio general</option>
+                <option value="rehabilitacion">Rehabilitación</option>
+                <option value="adulto_mayor">Adulto mayor</option>
+            </select>
+
+            <button type="submit" class="btn-login">Crear cuenta</button>
+        </form>
+
+        <p class="register-text">
+            ¿Ya tienes cuenta?
+            <a href="/index.html">Iniciar sesión</a>
+        </p>
+    </div>
+
 </div>
 
-<div class="container">
-
-    <h2>Crear cuenta</h2>
-
-    <form id="formRegistro">
-
-        <input type="text" name="nombre" placeholder="Nombre completo" required>
-
-        <input type="email" name="correo" placeholder="Correo electrónico" required>
-
-        <div class="password-wrapper">
-            <input id="regPass" type="password" name="contrasena" placeholder="Contraseña" required>
-            <span class="toggle-pass" onclick="toggleRegPass()">👁</span>
-        </div>
-
-        <ul id="passGuide">
-            <li id="len">Debe tener exactamente 8 caracteres</li>
-            <li id="mayus">Debe incluir una mayúscula</li>
-            <li id="especial">Debe incluir al menos un carácter especial: @ # $ % & * ! ?</li>
-
-        </ul>
-
-        <label>Tipo de usuario</label>
-        <select name="tipo" required>
-            <option value="general">Ejercicio general</option>
-            <option value="rehabilitacion">Rehabilitación</option>
-            <option value="adulto_mayor">Adulto mayor</option>
-        </select>
-
-        <button type="submit">Registrar</button>
-    </form>
-
-    <a href="../index.html">Volver</a>
-</div>
-
-<script src="../js/registro.js"></script>
+<script src="/js/registro.js"></script>
 
 </body>
 </html>

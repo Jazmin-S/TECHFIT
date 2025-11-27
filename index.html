@@ -2,37 +2,41 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>TECHFIT - Inicio de sesión</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/header.css">
+    <title>TECHFIT - Iniciar sesión</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
-<div class="header">
-    <h1>TECHFIT</h1>
+<div class="login-wrapper">
+
+    <div class="login-card animate">
+
+        <h1 class="logo">TECHFIT</h1>
+        <p class="subtitle">Bienvenido a TECHFIT</p>
+
+        <form id="formLogin">
+
+            <label for="correo">Correo electrónico</label>
+            <input type="email" id="correo" name="correo" placeholder="ejemplo@gmail.com" required>
+
+            <label for="loginPass">Contraseña</label>
+            <div class="password-wrapper">
+                <input id="loginPass" name="contrasena" type="password" placeholder="Tu contraseña" required>
+                <span class="toggle-pass" onclick="toggleLoginPass()">👁</span>
+            </div>
+
+            <button type="submit" class="btn-login">Iniciar sesión</button>
+        </form>
+
+        <p class="register-text">
+            ¿No tienes cuenta?
+            <a href="/pages/registro.html">Crear una nueva</a>
+        </p>
+    </div>
+
 </div>
 
-<div class="container">
-
-    <h2>Inicio de sesión</h2>
-
-    <form id="formLogin">
-
-        <input type="email" name="correo" placeholder="Correo electrónico" required>
-
-        <div class="password-wrapper">
-            <input id="loginPass" type="password" name="contrasena" placeholder="Contraseña" required>
-            <span class="toggle-pass" onclick="toggleLoginPass()">👁</span>
-        </div>
-
-        <button type="submit">Entrar</button>
-    </form>
-
-    <a href="pages/registro.html">Crear cuenta</a>
-
-</div>
-
-<script src="js/login.js"></script>
-
+<script src="/js/login.js"></script>
 </body>
 </html>

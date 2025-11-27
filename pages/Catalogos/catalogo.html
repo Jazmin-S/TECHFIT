@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo general - TECHFIT</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/General/catalogo.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+    <div id="menuBtn" class="menu-icon">☰</div>
+
+    <h1 class="header-title">TECHFIT</h1>
+
+    <div class="profile-icon" onclick="window.location.href='/pages/perfil.html'">
+        <img src="/img/perfil.png" alt="perfil">
+    </div>
+</nav>
+
+<!-- SIDEBAR -->
+<div id="sidebar" class="sidebar">
+    <div class="close-btn" id="closeSidebar">✕</div>
+
+    <h2>Categorías</h2>
+
+    <a href="/pages/Catalogos/catalogo.html">Ejercicio general</a>
+    <a href="/pages/Catalogos/catalogo_rehabilitacion.html">Rehabilitación</a>
+    <a href="/pages/Catalogos/catalogo_adultos.html">Adulto mayor</a>
+    <!-- puedes agregar más -->
+    <button id="logoutBtn" class="logout-btn">🚪 Cerrar sesión</button>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" class="overlay"></div>
+
+<!-- BOTÓN FLOTANTE PARA PANEL DE COMANDOS -->
+<button id="btnVoicePanel" class="voice-btn">
+    🎤 Comandos
+</button>
+
+<!-- PANEL DE COMANDOS DESPLEGABLE -->
+<div id="voicePanel" class="voice-panel">
+    <h3>🎤 Comandos</h3>
+    <ul>
+        <li>“Abrir menú” / “Cerrar menú”</li>
+        <li>“Iniciar ejercicio "--------"”</li>
+        <li>“Perfil”</li>
+        <li>“Cerrar sesión”</li>
+        <li>“Subir / Bajar”</li>
+    </ul>
+    <p class="tip">Micrófono activo</p>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<section class="contenido">
+    <h2 class="titulo-catalogo">Catálogo</h2>
+    <h3 class="subtitulo-catalogo">Ejercicios generales</h3>
+
+    <div id="catalogoGrid" class="grid"></div>
+</section>
+
+<!-- PANEL DE COMANDOS -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const btnVoicePanel = document.getElementById("btnVoicePanel");
+    const voicePanel = document.getElementById("voicePanel");
+
+    if (btnVoicePanel && voicePanel) {
+        btnVoicePanel.addEventListener("click", () => {
+            voicePanel.classList.toggle("active");
+        });
+    }
+});
+</script>
+
+
+<!-- SCRIPTS -->
+<script src="/js/menu.js"></script>
+<script src="/js/General/catalogo.js"></script>
+<script src="/js/voice/voice-core.js"></script>
+<script src="/js/comandos.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+
+            // limpiar la sesión
+            localStorage.removeItem("usuario");
+            localStorage.removeItem("fotoPerfil");
+
+            // mensaje opcional
+            alert("Sesión cerrada correctamente 💙");
+
+            // redirigir
+            window.location.href = "/index.html";
+        });
+    }
+});
+</script>
+
+
+</body>
+</html>

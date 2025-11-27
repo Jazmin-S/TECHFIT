@@ -1,113 +1,164 @@
-/* ---------- VARIABLES ---------- */
+/* ==========================================================
+   ESTILO PREMIUM TECHFIT PARA LOGIN Y REGISTRO
+========================================================== */
+
 :root {
-    --azul: #0078FF;
-    --azul-oscuro: #005ECC;
-    --azul-claro: #E6F1FF;
-    --gris: #f2f2f2;
-    --texto: #222;
+    --azul: #0e6fb5;
+    --azul-oscuro: #094f82;
+    --fondo: #eef3ff;
+    --blanco: #ffffff;
+    --sombra: rgba(0,0,0,0.15);
+    --radius: 14px;
 }
 
-/* ---------- GENERAL ---------- */
+/* ====== BODY SIN RECORTES ====== */
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: var(--gris);
     margin: 0;
     padding: 0;
+    font-family: "Poppins", sans-serif;
+
+    /* Fondo bonito */
+    background: linear-gradient(135deg, #0e6fb5, #063f68);
+
+    /* Permitir scroll si el contenido es alto */
+    min-height: 100vh;
+    height: auto;
+
+    /* Centrar si hay espacio, pero permitir crecer */
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding-top: 40px; /* separa desde arriba */
+    padding-bottom: 40px; /* por si la tarjeta es grande */
 }
 
-/* ---------- CONTENEDOR ---------- */
-.container {
+
+.login-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+/* Tarjeta */
+.login-card {
     width: 380px;
-    margin: 40px auto;
-    padding: 25px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    background: var(--blanco);
+    padding: 35px 28px;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 25px var(--sombra);
+    text-align: center;
 }
 
-/* ---------- TITULOS ---------- */
-h2 {
-    text-align: center;
+/* Animación */
+.animate {
+    animation: fadeIn .6s ease-out;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo */
+.logo {
+    font-size: 34px;
+    font-weight: 800;
     color: var(--azul);
 }
 
-/* ---------- INPUTS ---------- */
+.subtitle {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+
+/* Inputs */
+label {
+    text-align: left;
+    display: block;
+    color: #444;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
 input, select {
     width: 100%;
     padding: 12px;
-    margin: 10px 0;
-    border: 2px solid var(--azul-claro);
-    border-radius: 8px;
+    border-radius: var(--radius);
+    border: 2px solid #dfe8f5;
     font-size: 15px;
+    margin-bottom: 15px;
     box-sizing: border-box;
 }
 
 input:focus, select:focus {
     border-color: var(--azul);
-    box-shadow: 0 0 6px rgba(0,120,255,0.3);
+    box-shadow: 0 0 6px rgba(0,120,255,0.25);
 }
 
-/* ---------- BOTONES ---------- */
-button {
-    width: 100%;
-    background: var(--azul);
-    padding: 12px;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 15px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: var(--azul-oscuro);
-}
-
-/* ---------- LINKS ---------- */
-a {
-    text-align: center;
-    display: block;
-    margin-top: 10px;
-    color: var(--azul-oscuro);
-}
-
-/* ---------- CONTRASEÑA + ICONO ---------- */
+/* Contraseña */
 .password-wrapper {
     position: relative;
-    width: 100%;
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding-right: 45px;   
-    box-sizing: border-box;
 }
 
 .toggle-pass {
     position: absolute;
-    right: 12px;
+    right: 14px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    user-select: none;
     font-size: 18px;
-    color: #444;
+    color: #666;
 }
 
-/* ---------- GUIA DE CONTRASEÑA ---------- */
+/* Lista de requisitos */
 #passGuide {
-    list-style: none;
-    padding: 0;
+    text-align: left;
     font-size: 14px;
+    margin-bottom: 15px;
 }
 
 #passGuide li {
     color: #b33;
+    margin-bottom: 4px;
 }
 
 #passGuide li.valid {
     color: #0a7;
     font-weight: bold;
+}
+
+/* Botón */
+.btn-login {
+    background: var(--azul);
+    color: white;
+    padding: 12px;
+    border-radius: var(--radius);
+    border: none;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: .2s;
+}
+
+.btn-login:hover {
+    background: var(--azul-oscuro);
+}
+
+/* Link */
+.register-text {
+    margin-top: 15px;
+    font-size: 15px;
+}
+
+.register-text a {
+    color: var(--azul);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
 }

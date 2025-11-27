@@ -1,92 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejecución | TECHFIT</title>
-    <link rel="stylesheet" href="../css/ejecucion.css">
+    <meta charset="UTF-8" />
+    <title>TECHFIT - Ejecución</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/General/ejecucion.css">
 </head>
+
 <body>
 
-<h1 class="title">Ejecución del ejercicio</h1>
-<h2 id="nombre-ejercicio" class="subtitle"></h2>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <button class="back-btn" onclick="window.location.href='/pages/Catalogos/catalogo.html'">←</button>
 
-<div class="camera-container">
-    <video id="video" autoplay playsinline muted></video>
-    <canvas id="poseCanvas"></canvas>
-</div>
+    <h1 class="header-title">
+        Ejecutando ejercicio — <span id="nombre-ejercicio"></span>
+    </h1>
 
-<p id="status" class="mensaje">Preparando cámara e IA...</p>
-<p id="feedback" class="retro"></p>
+    <img id="perfilMini" class="perfil-mini" src="/img/user_default.png"
+         onclick="window.location.href='/pages/perfil.html'">
+</nav>
 
-<div id="countdown" class="counter"></div>
-<div id="timer" class="timer"></div>
+<main class="exec-container">
 
-<div class="hud">
-    <div class="hud-item">
-        <span class="hud-label">Nivel</span>
-        <span id="hud-level" class="hud-value">1</span>
-    </div>
+    <!-- CÁMARA -->
+    <section class="camera-card">
 
-    <div class="hud-item hud-xp">
-        <span class="hud-label">XP</span>
-        <div class="xp-bar">
-            <div id="xp-fill" class="xp-fill"></div>
+        <div class="camera-wrapper">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="poseCanvas"></canvas>
         </div>
-        <span id="hud-xp" class="hud-small">0 / 100</span>
-    </div>
 
-    <div class="hud-item">
-        <span class="hud-label">Reps</span>
-        <span id="hud-reps" class="hud-value">0</span>
-    </div>
+        <!-- HUD -->
+        <div class="hud">
+            <div class="hud-item">Reps: <span id="hud-reps">0</span></div>
+            <div class="hud-item">Score: <span id="hud-score">0</span></div>
+            <div class="hud-item">Nivel: <span id="hud-level">1</span></div>
+        </div>
 
-    <div class="hud-item">
-        <span class="hud-label">Score</span>
-        <span id="hud-score" class="hud-value">0</span>
-    </div>
+        <!-- LUCES -->
+        <div class="lights">
+            <div id="light-ok" class="light ok"></div>
+            <div id="light-bad" class="light bad"></div>
+        </div>
 
-    <div class="hud-item">
-        <span class="hud-label">Última repetición</span>
-        <span id="hud-grade" class="hud-value">-</span>
+        <!-- FEEDBACK -->
+        <p id="feedback" class="feedback"></p>
+
+        <!-- HIIT TIMER -->
+        <div class="hiit-timer">
+            <h2 id="hiit-label">HIIT: Ejercicio</h2>
+            <span id="hiit-time">30</span>s
+        </div>
+
+    </section>
+
+    <!-- CONTROLES -->
+    <section class="controls-card">
+
+        <h2>Controles</h2>
+
+        <button id="btnPausar">⏸ Pausar</button>
+        <button id="btnReanudar">▶ Reanudar</button>
+        <button id="btnDetener">⏹ Finalizar</button>
+        <button id="voiceHelpBtn" class="voice-btn">🎤 Comandos</button>
+
+        <div id="voiceCommandsPanel" class="voice-panel">
+            <h3>Comandos disponibles:</h3>
+            <ul>
+                <li>“Pausar”</li>
+                <li>“Continuar”</li>
+                <li>“Detener”</li>
+                <li>“Tiempo”</li>
+                <li>“Salir”</li>
+            </ul>
+        </div>
+
+    </section>
+
+</main>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+
+<script>
+    // Cargar el nombre del ejercicio
+    document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const ejercicio = params.get("ejercicio");
+        if (ejercicio) {
+            document.getElementById("nombre-ejercicio").textContent = ejercicio;
+        }
+        
+        // Cargar foto de perfil
+        let mini = localStorage.getItem("fotoPerfil");
+        if (mini) document.getElementById("perfilMini").src = mini;
+    });
+</script>
+
+<script src="/js/camara.js"></script>
+<script src="/js/voice/voice-ejecucion.js"></script>
+
+<div id="exitModal" class="exit-modal hidden">
+    <div class="exit-modal-content">
+        <h3>¿Deseas continuar o salir?</h3>
+
+        <div class="modal-buttons">
+            <button id="seguirBtn">Seguir</button>
+            <button id="salirBtn" class="danger">Salir</button>
+        </div>
     </div>
 </div>
-
-<div class="btn-row">
-    <button id="btnPausar">Pausar</button>
-    <button id="btnDetener">Detener</button>
-</div>
-
-<!-- BOTÓN FLOTANTE -->
-<button id="voiceHelpBtn" class="voice-btn">🎤 Comandos & Modos</button>
-
-<!-- PANEL FLOTANTE -->
-<div id="voiceCommandsPanel" class="voice-panel">
-    <h3>🎤 Comandos</h3>
-    <ul>
-        <li>"Pausar"</li>
-        <li>"Seguir / Reanudar"</li>
-        <li>"Detener"</li>
-        <li>"Tiempo"</li>
-        <li>"Salir"</li>
-    </ul>
-
-    <h3>🎮 Modos especiales</h3>
-    <ul>
-        <li>"Modo intenso"</li>
-        <li>"Modo recuperativo"</li>
-        <li>"Modo nocturno / modo oscuro"</li>
-        <li>"Modo silencioso"</li>
-        <li>"Modo normal"</li>
-    </ul>
-</div>
-
-<!-- IA -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@2.0.0/dist/pose-detection.min.js"></script>
-
-<script src="../js/camara.js"></script>
-<script src="../js/voice-ejecucion.js"></script>
 
 </body>
 </html>

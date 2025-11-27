@@ -1,107 +1,74 @@
-/* Fondo general */
 body {
+    font-family: Poppins, sans-serif;
+    background: #eef3ff;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background: #e9f3ff;
 }
 
-/* ---------------------- */
-/* ENCABEZADO */
-/* ---------------------- */
-.header {
-    width: 100%;
-    background: linear-gradient(to bottom, #1da1f2, #1291dd);
-    padding: 20px;
+/* NAV */
+.navbar {
+    background: #0e6fb5;
+    padding: 16px;
     display: flex;
     align-items: center;
-    box-shadow: 0 3px 8px #00000033;
-}
-
-.btn-volver {
     color: white;
-    text-decoration: none;
-    font-size: 20px;
-    background: #0e6fb5;
-    padding: 8px 15px;
-    border-radius: 6px;
-    transition: 0.2s;
 }
 
-.btn-volver:hover {
-    background: #0a5c99;
+.back-btn {
+    font-size: 22px;
+    background: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 8px;
+    margin-right: 15px;
+    cursor: pointer;
 }
 
-.title {
-    flex-grow: 1;
+.profile-container {
+    max-width: 420px;
+    background: white;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 18px;
     text-align: center;
-    font-size: 40px; /* 🔥 Más grande */
-    font-weight: 900; /* 🔥 Más grueso */
-    letter-spacing: 2px; /* 🔥 Más estilizado */
-    color: white;
-    margin-right: 55px; /* Ajuste para contrarrestar el botón Volver */
-    margin-left: -20px; /* Centrar visualmente */
-    text-shadow: 0px 2px 4px #00000055; /* 🔥 Brillito profesional */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
-
-/* ---------------------- */
-/* PERFIL */
-/* ---------------------- */
-
-.perfil-container {
-    max-width: 600px;
-    margin: 60px auto 40px;
-    text-align: center;
-}
-
-/* FOTO DE PERFIL */
-.foto-container {
-    width: 150px;
-    height: 150px;
-    margin: 0 auto;
-}
-
-.foto-container img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
+#perfil-img {
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
-    border: 4px solid white;
-    box-shadow: 0 0 10px #00000044;
+    object-fit: cover;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    transition: .3s;
 }
 
-/* Nombre */
-.nombre {
-    font-size: 28px;
-    color: #003d73;
-    margin-top: 15px;
-    margin-bottom: 5px;
+#perfil-img:hover {
+    transform: scale(1.05);
 }
 
-/* Descripción */
-.descripcion {
-    color: #555;
-    font-size: 16px;
-    max-width: 350px;
-    margin: 0 auto 20px;
-}
-
-/* Tarjeta de datos */
-.perfil-card {
-    background: #dcecff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 12px #00000022;
-    margin-top: 20px;
+.profile-data p {
+    font-size: 18px;
+    margin: 10px 0;
     text-align: left;
 }
 
-.perfil-card p {
-    font-size: 19px;
-    margin: 10px 0;
+#inputFoto {
+    display: none;
 }
 
-strong {
-    color: #003d73;
+.btnPerfil {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #0e6fb5;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.btnPerfil:hover {
+    background: #094f82;
 }

@@ -1,521 +1,643 @@
-/* ============================================================
-   TECHFIT — Sistema de cámara + IA optimizado y reparado
-   Corrección de freezes, doble loops y modelo MoveNet
-   ============================================================ */
+/* ==========================================================
+   TECHFIT — HOLISTIC PRO COMPLETO
+========================================================== */
+let modalAbierto = false;
 
-/* ========= PARÁMETROS DEL EJERCICIO ============== */
-const params = new URLSearchParams(window.location.search);
-const ejercicioActual = params.get("ejercicio") || "generico";
+function mostrarModalSalida() {
+    const modal = document.getElementById("exitModal");
+    modal.classList.remove("hidden");
+    modalAbierto = true;
 
-const nombresEjercicio = {
-    sentadillas: "Sentadillas básicas",
-    desplantes: "Desplantes",
-    elevaciones_brazo: "Elevaciones de brazo",
-    flexiones_pared: "Flexiones de pared",
-    plancha: "Plancha básica",
-    rodillas: "Elevación de rodillas",
-    jumping: "Jumping jacks modificados",
-    pierna: "Elevaciones laterales de pierna"
-};
-
-const tituloEj = document.getElementById("nombre-ejercicio");
-tituloEj.textContent =
-    nombresEjercicio[ejercicioActual] ?
-    "Ejecutando: " + nombresEjercicio[ejercicioActual] :
-    "";
-
-/* ========= ELEMENTOS DOM ============== */
-let video = document.getElementById("video");
-let canvas = document.getElementById("poseCanvas");
-let ctx = canvas.getContext("2d");
-let statusText = document.getElementById("status");
-let countdownBox = document.getElementById("countdown");
-let timerBox = document.getElementById("timer");
-
-const levelEl = document.getElementById("hud-level");
-const xpTextEl = document.getElementById("hud-xp");
-const xpFillEl = document.getElementById("xp-fill");
-const repsEl = document.getElementById("hud-reps");
-const scoreEl = document.getElementById("hud-score");
-const gradeEl = document.getElementById("hud-grade");
-const feedbackEl = document.getElementById("feedback");
-
-/* ========= ESTADOS GLOBALES ============== */
-let stream = null;
-let detector = null;
-let detecting = false;
-let isPaused = false;
-
-// Estados de ejercicios
-let squatState = "up";
-let squatMinAngle = 180;
-let lungeState = "up";
-let armState = "down";
-let pushState = "up";
-let plankGoodFrames = 0;
-let kneesState = "down";
-let jumpingState = "closed";
-let sideLegState = "down";
-
-// HIIT
-let tiempoHIIT = 30;
-let descanso = 10;
-let enDescanso = false;
-let intervalo = null;
-
-// progreso videojuego
-let nivel = 1;
-let xp = 0;
-let xpNecesaria = 100;
-let reps = 0;
-let score = 0;
-const STORAGE_KEY = "techfit_progress_v1";
-
-// ========= UTILIDADES ============== */
-function getAngleDeg(a, b, c) {
-    if (!a || !b || !c) return 180;
-    const AB = { x: a.x - b.x, y: a.y - b.y };
-    const CB = { x: c.x - b.x, y: c.y - b.y };
-    const dot = AB.x * CB.x + AB.y * CB.y;
-    const mag1 = Math.hypot(AB.x, AB.y);
-    const mag2 = Math.hypot(CB.x, CB.y);
-    if (!mag1 || !mag2) return 180;
-    const cos = dot / (mag1 * mag2);
-    return (Math.acos(Math.max(-1, Math.min(1, cos))) * 180) / Math.PI;
+    try { speak("¿Deseas continuar o salir?"); } catch(e){}
 }
 
-function setFeedback(text) {
-    if (feedbackEl) feedbackEl.textContent = text;
+function cerrarModalSalida() {
+    const modal = document.getElementById("exitModal");
+    modal.classList.add("hidden");
+    modalAbierto = false;
 }
 
-/* ========= EFECTOS DE REP ORIGINALES (LUZ VERDE/ROJA) ========== */
-function gradeRep(grade, sumaRep) {
-    if (sumaRep) reps++;
+// Variables globales
+var holistic = null;
+var videoElement, canvasElement, canvasCtx;
+var running = true;
+var repCount = 0;
+var score = 0;
+var stateA = "start";
+var currentExercise = null;
+var smoothed = null;
 
-    score += (grade === "Perfect" ? 10 : grade === "Good" ? 6 : 2);
-    repsEl.textContent = reps;
-    scoreEl.textContent = score;
-    gradeEl.textContent = grade;
+// Elementos UI
+var feedbackTxt, repsTxt, scoreTxt;
 
-    document.body.classList.remove("rep-perfect", "rep-good", "rep-bad");
-    if (grade === "Perfect") document.body.classList.add("rep-perfect");
-    else if (grade === "Good") document.body.classList.add("rep-good");
-    else document.body.classList.add("rep-bad");
+/* ==========================================================
+   INICIALIZACIÓN
+========================================================== */
 
-    setTimeout(() => {
-        document.body.classList.remove("rep-perfect", "rep-good", "rep-bad");
-    }, 700);
-}
+function initApp() {
+    // Obtener parámetros de URL
+    const params = new URLSearchParams(window.location.search);
+    currentExercise = params.get("ejercicio");
+    
+    // Inicializar elementos UI
+    feedbackTxt = document.getElementById("feedback");
+    repsTxt = document.getElementById("hud-reps");
+    scoreTxt = document.getElementById("hud-score");
+    
+    // Inicializar elementos de video
+    videoElement = document.getElementById("video");
+    canvasElement = document.getElementById("poseCanvas");
+    canvasCtx = canvasElement.getContext("2d");
+    
+    // Configurar canvas
+    canvasElement.width = 640;
+    canvasElement.height = 480;
+    
+    // Inicializar controles
+    initControls();
 
-/* ========= MANEJADORES DE EJERCICIOS (TUS FUNCIONES AFINADAS) ========= */
-function handleSentadillas(kp) {
-    if (enDescanso) return;
-
-    const lh = kp[11], lk = kp[13], la = kp[15];
-    const rh = kp[12], rk = kp[14], ra = kp[16];
-    if (!lh || !lk || !la || !rh || !rk || !ra) return;
-
-    const angle = (getAngleDeg(lh, lk, la) + getAngleDeg(rh, rk, ra)) / 2;
-
-    squatMinAngle = Math.min(squatMinAngle, angle);
-
-    if (angle > 165) setFeedback("Extiende al subir.");
-    else if (angle > 120) setFeedback("Baja con control.");
-    else if (angle > 90) setFeedback("Muy bien, baja más.");
-    else setFeedback("Excelente profundidad.");
-
-    if (squatState === "up" && angle < 105) {
-        squatState = "down";
-    } else if (squatState === "down" && angle > 165) {
-        let grade = squatMinAngle < 70 ? "Perfect" :
-                    squatMinAngle < 95 ? "Good" : "Bad";
-
-        gradeRep(grade, true);
-        squatMinAngle = 180;
-        squatState = "up";
+    initHIITTimer();
+    
+    // Inicializar Holistic
+    initHolistic();
+    
+    // Mostrar ejercicio actual
+    if (currentExercise) {
+        const nombreEjercicio = document.getElementById("nombre-ejercicio");
+        if (nombreEjercicio) {
+            nombreEjercicio.textContent = currentExercise;
+        }
     }
 }
+document.addEventListener("DOMContentLoaded", () => {
+    const seguirBtn = document.getElementById("seguirBtn");
+    const salirBtn = document.getElementById("salirBtn");
 
-function handleDesplantes(kp) {
-    if (enDescanso) return;
-    const lh = kp[11], lk = kp[13], la = kp[15];
-    const rh = kp[12], rk = kp[14], ra = kp[16];
-    if (!lk || !rk) return;
+    seguirBtn.onclick = () => {
+        cerrarModalSalida();
+        running = true;
+        setFeedback("Continuamos");
+        try { speak("Perfecto, continuamos."); } catch(e){}
+    };
 
-    const angle = Math.min(getAngleDeg(lh, lk, la), getAngleDeg(rh, rk, ra));
+    salirBtn.onclick = () => {
+        try { speak("Saliendo del ejercicio."); } catch(e){}
+        window.location.href = "/pages/Catalogos/catalogo.html";
+    };
+});
 
-    if (angle > 150) setFeedback("Da un paso más grande.");
-    else if (angle > 120) setFeedback("Baja recto.");
-    else if (angle > 90) setFeedback("Muy bien.");
-    else setFeedback("Excelente bajada.");
 
-    if (lungeState === "up" && angle < 100) {
-        lungeState = "down";
-    } else if (lungeState === "down" && angle > 150) {
-        let grade = angle < 85 ? "Perfect" :
-                    angle < 110 ? "Good" : "Bad";
-        gradeRep(grade, true);
-        lungeState = "up";
+
+/* ==========================================================
+   SUAVIZADO EMA
+========================================================== */
+function smoothLandmarks(raw, alpha = 0.4) {
+    if (!smoothed) return raw;
+
+    for (let i = 0; i < raw.length; i++) {
+        smoothed[i].x = smoothed[i].x * (1 - alpha) + raw[i].x * alpha;
+        smoothed[i].y = smoothed[i].y * (1 - alpha) + raw[i].y * alpha;
+        smoothed[i].z = smoothed[i].z * (1 - alpha) + raw[i].z * alpha;
     }
+
+    return smoothed;
 }
 
-function handleElevacionesBrazo(kp) {
-    const ls = kp[5], le = kp[7];
-    const rs = kp[6], re = kp[8];
-    if (!ls || !le || !rs || !re) return;
+/* ==========================================================
+   UTILIDADES
+========================================================== */
 
-    const angle = Math.max(
-        getAngleDeg(le, ls, { x: ls.x, y: ls.y - 100 }),
-        getAngleDeg(re, rs, { x: rs.x, y: rs.y - 100 })
-    );
+function setFeedback(msg) {
+    if (feedbackTxt) feedbackTxt.textContent = msg;
 
-    if (angle < 30) setFeedback("Sube más el brazo.");
-    else if (angle < 70) setFeedback("Muy bien.");
-    else setFeedback("Excelente elevación.");
-
-    if (armState === "down" && angle > 65) armState = "up";
-    else if (armState === "up" && angle < 25) {
-        gradeRep("Good", true);
-        armState = "down";
-    }
-}
-
-function handleFlexionesPared(kp) {
-    const ls = kp[5], lh = kp[11];
-    if (!ls || !lh) return;
-
-    const torsoAngle = Math.abs(ls.y - lh.y);
-
-    if (torsoAngle < 40) setFeedback("Inclínate más.");
-    else if (torsoAngle < 80) setFeedback("Bien inclinado.");
-    else setFeedback("Muy buena alineación.");
-
-    if (pushState === "up" && torsoAngle > 70) pushState = "down";
-    else if (pushState === "down" && torsoAngle < 40) {
-        gradeRep("Good", true);
-        pushState = "up";
-    }
-}
-
-function handlePlancha(kp) {
-    const ls = kp[5], lh = kp[11], la = kp[15];
-    if (!ls || !lh || !la) return;
-
-    const sY = ls.y;
-    const hY = lh.y;
-    const aY = la.y;
-
-    const mid = (sY + aY) / 2;
-    const diff = hY - mid;
-
-    if (Math.abs(diff) < 10) {
-        setFeedback("Postura excelente.");
-        plankGoodFrames++;
-    } else if (diff > 20) setFeedback("Cadera muy baja.");
-    else if (diff < -20) setFeedback("Cadera alta.");
-
-    if (plankGoodFrames > 30) {
-        gradeRep("Perfect", false);
-        plankGoodFrames = 0;
-    }
-}
-
-function handleRodillas(kp) {
-    const lh = kp[11], lk = kp[13];
-    const rh = kp[12], rk = kp[14];
-
-    const kneeY = Math.min(lk.y, rk.y);
-    const hipY = Math.min(lh.y, rh.y);
-    const diff = hipY - kneeY;
-
-    if (diff < 20) setFeedback("Sube más la rodilla.");
-    else if (diff < 40) setFeedback("Muy bien.");
-    else setFeedback("Excelente elevación.");
-
-    if (kneesState === "down" && diff > 35) kneesState = "up";
-    else if (kneesState === "up" && diff < 15) {
-        gradeRep("Good", true);
-        kneesState = "down";
-    }
-}
-
-function handleJumping(kp) {
-    const lh = kp[11], rh = kp[12];
-    const lo = kp[9], ro = kp[10];
-    if (!lo || !ro) return;
-
-    const handY = Math.min(lo.y, ro.y);
-    const hipY = Math.min(lh.y, rh.y);
-
-    if (handY < hipY - 80 && jumpingState === "closed") {
-        setFeedback("Muy bien, brazos arriba.");
-        jumpingState = "open";
-    } else if (handY > hipY - 20 && jumpingState === "open") {
-        gradeRep("Good", true);
-        jumpingState = "closed";
-    }
-}
-
-function handlePierna(kp) {
-    const lh = kp[11], lk = kp[13];
-    if (!lk || !lh) return;
-
-    const diff = lh.x - lk.x;
-
-    if (diff < 25) setFeedback("Eleva más la pierna.");
-    else if (diff < 50) setFeedback("Muy bien.");
-    else setFeedback("Excelente elevación.");
-
-    if (sideLegState === "down" && diff > 45) sideLegState = "up";
-    else if (sideLegState === "up" && diff < 10) {
-        gradeRep("Good", true);
-        sideLegState = "down";
-    }
-}
-
-/* ========= MAPA DE EJERCICIOS ========= */
-const handlers = {
-    sentadillas: handleSentadillas,
-    desplantes: handleDesplantes,
-    elevaciones_brazo: handleElevacionesBrazo,
-    flexiones_pared: handleFlexionesPared,
-    plancha: handlePlancha,
-    rodillas: handleRodillas,
-    jumping: handleJumping,
-    pierna: handlePierna,
-};
-
-const exerciseHandler = handlers[ejercicioActual] || function(){};
-
-/* ============================================================
-   🔥 INICIALIZAR CÁMARA + IA (arreglado)
-============================================================ */
-async function initCamera() {
+    // --- INTEGRAR VOZ DE RETROALIMENTACIÓN ---
     try {
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: { width: 640, height: 480, facingMode: "user" }
-        });
-
-        video.srcObject = stream;
-
-        return new Promise(resolve => {
-            video.onloadedmetadata = () => {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                resolve();
-            };
-        });
-
+        // Función speak() viene de voice-ejecucion.js
+        if (typeof speak === "function") {
+            speak(msg);
+        }
     } catch (e) {
-        console.error("Error cámara:", e);
-        statusText.textContent = "No se pudo acceder a la cámara.";
+        console.warn("Error al reproducir retroalimentación por voz:", e);
     }
 }
 
-/* ============================================================
-   🔥 CARGAR MOVENET (versión correcta 2025)
-============================================================ */
-async function initModel() {
-    try {
-        statusText.textContent = "Cargando IA...";
-        
-        // Primero establecer el backend
-        await tf.setBackend("webgl");
-        await tf.ready();
-        
-        statusText.textContent = "Cargando modelo de poses...";
 
-        detector = await poseDetection.createDetector(
-            poseDetection.SupportedModels.MoveNet,
-            {
-                modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
-                enableSmoothing: true,
-            }
-        );
+function rep(good = false) {
+    repCount++;
+    if (repsTxt) repsTxt.textContent = repCount;
+    score += good ? 10 : 5;
+    if (scoreTxt) scoreTxt.textContent = score;
+}
 
-        statusText.textContent = "IA lista.";
-        console.log("Modelo MoveNet cargado correctamente");
-    } catch (error) {
-        console.error("Error IA:", error);
-        statusText.textContent = "Error al cargar IA: " + error.message;
+function angle(a, b, c) {
+    const AB = { x: a.x - b.x, y: a.y - b.y, z: a.z - b.z };
+    const CB = { x: c.x - b.x, y: c.y - b.y, z: c.z - b.z };
+
+    const dot = AB.x * CB.x + AB.y * CB.y + AB.z * CB.z;
+    const magAB = Math.sqrt(AB.x ** 2 + AB.y ** 2 + AB.z ** 2);
+    const magCB = Math.sqrt(CB.x ** 2 + CB.y ** 2 + CB.z ** 2);
+
+    return Math.acos(dot / (magAB * magCB)) * 180 / Math.PI;
+}
+
+function dist(a, b) {
+    return Math.sqrt(
+        (a.x - b.x) ** 2 +
+        (a.y - b.y) ** 2 +
+        (a.z - b.z) ** 2
+    );
+}
+
+/* ==========================================================
+   EJERCICIOS
+========================================================== */
+
+function sentadillas(lm) {
+    const hip = lm[23], knee = lm[25], ankle = lm[27];
+    if (!hip) return;
+
+    const kneeAng = angle(hip, knee, ankle);
+
+    if (kneeAng < 95 && stateA === "start") {
+        stateA = "down";
+        setFeedback("Bien bajado ✔");
+    }
+    if (kneeAng > 160 && stateA === "down") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Repetición completa 🔥");
     }
 }
 
-/* ============================================================
-   🔥 DIBUJAR ESQUELETO COMPLETO (PUNTOS Y LÍNEAS)
-============================================================ */
-function drawSkeleton(keypoints, minConfidence = 0.3) {
-    // Configuración de colores y estilos
-    ctx.fillStyle = "#00FF88";
-    ctx.strokeStyle = "#00FF88";
-    ctx.lineWidth = 2;
-    
-    // Dibujar puntos (keypoints)
-    keypoints.forEach((keypoint) => {
-        if (keypoint.score >= minConfidence) {
-            ctx.beginPath();
-            ctx.arc(keypoint.x, keypoint.y, 6, 0, 2 * Math.PI);
-            ctx.fill();
-            
-            // Añadir un borde para mejor visibilidad
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            ctx.strokeStyle = "#00FF88";
-            ctx.lineWidth = 2;
-        }
-    });
-    
-    // Definir conexiones del esqueleto
-    const connections = [
-        // Cara y torso
-        [5, 6], [5, 11], [6, 12], [11, 12],
-        // Brazos izquierdos
-        [5, 7], [7, 9], 
-        // Brazos derechos
-        [6, 8], [8, 10],
-        // Pierna izquierda
-        [11, 13], [13, 15],
-        // Pierna derecha
-        [12, 14], [14, 16]
-    ];
-    
-    // Dibujar líneas del esqueleto
-    connections.forEach(([i, j]) => {
-        const kp1 = keypoints[i];
-        const kp2 = keypoints[j];
-        
-        if (kp1.score >= minConfidence && kp2.score >= minConfidence) {
-            ctx.beginPath();
-            ctx.moveTo(kp1.x, kp1.y);
-            ctx.lineTo(kp2.x, kp2.y);
-            ctx.stroke();
-        }
-    });
+function elevaciones_brazo(lm) {
+    const shoulder = lm[11], elbow = lm[13], wrist = lm[15];
+    if (!shoulder) return;
+
+    const ang = angle(shoulder, elbow, wrist);
+
+    if (ang > 150 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Brazo arriba ✔");
+    }
+    if (ang < 80 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Repetición correcta 🔥");
+    }
 }
 
-/* ============================================================
-   🔥 LOOP DE DETECCIÓN (NO SE CONGELA)
-============================================================ */
-async function detectLoop() {
-    if (!detector || isPaused || !detecting) {
-        requestAnimationFrame(detectLoop);
+function rodillas(lm) {
+    const hip = lm[23], knee = lm[25];
+    if (!hip) return;
+
+    const diff = hip.y - knee.y;
+
+    if (diff < -0.03 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Rodilla arriba ✔");
+    }
+    if (diff > -0.01 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Bien hecho 🔥");
+    }
+}
+
+function jumping(lm) {
+    const lAnkle = lm[27], rAnkle = lm[28];
+    if (!lAnkle || !rAnkle) return;
+
+    const d = dist(lAnkle, rAnkle);
+
+    if (d > 0.25 && stateA === "start") {
+        stateA = "open";
+        setFeedback("Piernas abiertas ✔");
+    }
+    if (d < 0.1 && stateA === "open") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Repetición correcta 🔥");
+    }
+}
+
+function pierna(lm) {
+    const hip = lm[23], ankle = lm[27];
+    const diff = hip.x - ankle.x;
+
+    if (diff < -0.05 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Arriba ✔");
+    }
+    if (diff > -0.02 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Correcto 🔥");
+    }
+}
+
+function glute_bridge(lm) {
+    const hip = lm[23], knee = lm[25];
+    const diff = hip.y - knee.y;
+
+    if (diff < -0.03 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Cadera arriba ✔");
+    }
+    if (diff > -0.01 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Correcto 🔥");
+    }
+}
+
+function remo_banda(lm) {
+    const shoulder = lm[11], elbow = lm[13];
+    const ang = angle({ x: shoulder.x - 0.1, y: shoulder.y, z: shoulder.z }, shoulder, elbow);
+
+    if (ang < 110 && stateA === "start") {
+        stateA = "pull";
+        setFeedback("Jala fuerte ✔");
+    }
+    if (ang > 150 && stateA === "pull") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Repetición correcta 🔥");
+    }
+}
+
+function elevacion_talones(lm) {
+    const hip = lm[23], ankle = lm[27];
+    const diff = hip.y - ankle.y;
+
+    if (diff > 0.08 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Arriba ✔");
+    }
+    if (diff < 0.04 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Correcto 🔥");
+    }
+}
+
+function estiramiento_cuello(lm) {
+    const leftEar = lm[7];
+    const rightEar = lm[8];
+
+    const diff = leftEar.y - rightEar.y;
+
+    if (diff > 0.03) {
+        setFeedback("Inclina un poco →");
+    } else if (diff < -0.03) {
+        setFeedback("← Inclina un poco");
+    } else {
+        setFeedback("Postura correcta ✔");
+    }
+}
+
+/* ==========================================================
+   MAPEADOR DE EJERCICIOS
+========================================================== */
+const EXERCISES = {
+    sentadillas,
+    elevaciones_brazo,
+    rodillas,
+    jumping,
+    pierna,
+    glute_bridge,
+    remo_banda,
+    elevacion_talones,
+    estiramiento_cuello
+};
+
+/* ==========================================================
+   CALLBACK HOLISTIC
+========================================================== */
+
+function onResults(results) {
+    if (!canvasCtx || !running) return;
+    
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    
+    // Dibujar video
+    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+    if (!results.poseLandmarks) {
+        canvasCtx.restore();
         return;
     }
 
-    try {
-        const poses = await detector.estimatePoses(video, {
-            maxPoses: 1,
-            flipHorizontal: false
-        });
+    let lm = results.poseLandmarks;
+    smoothed = smoothed ? smoothLandmarks(lm) : lm;
 
-        // Limpiar canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        if (poses.length > 0 && poses[0].keypoints) {
-            const keypoints = poses[0].keypoints;
-            
-            // 🔥 Dibujar esqueleto completo (puntos + líneas)
-            drawSkeleton(keypoints, 0.3);
-            
-            // 🔥 Procesar el ejercicio
-            exerciseHandler(keypoints);
-        }
-    } catch (error) {
-        console.error("Error en detección:", error);
+    // Dibujar landmarks y conexiones
+    if (window.drawingUtils) {
+        const draw = window.drawingUtils;
+        draw.drawConnectors(canvasCtx, smoothed, Holistic.POSE_CONNECTIONS,
+            { color: "#00E5FF", lineWidth: 3 });
+        draw.drawLandmarks(canvasCtx, smoothed,
+            { color: "#00FFFF", radius: 4 });
     }
 
-    requestAnimationFrame(detectLoop);
+    // Ejecutar ejercicio actual
+    if (EXERCISES[currentExercise]) {
+        EXERCISES[currentExercise](smoothed);
+    }
+
+    canvasCtx.restore();
 }
 
-/* ============================================================
-   🔥 HIIT + CONTROL
-============================================================ */
-function iniciarHIIT() {
-    let tiempo = tiempoHIIT;
-    enDescanso = false;
-    timerBox.style.color = "#00ff7f";
-    statusText.textContent = "Entrenando...";
+/* ==========================================================
+   INICIALIZAR HOLISTIC
+========================================================== */
 
-    intervalo = setInterval(() => {
-        timerBox.textContent = `${tiempo}s`;
-        tiempo--;
-        if (tiempo < 0) {
-            clearInterval(intervalo);
-            iniciarDescanso();
-        }
-    }, 1000);
-}
-
-function iniciarDescanso() {
-    let tiempo = descanso;
-    enDescanso = true;
-    timerBox.style.color = "#ffae00";
-    statusText.textContent = "Descanso...";
-
-    intervalo = setInterval(() => {
-        timerBox.textContent = `${tiempo}s`;
-        tiempo--;
-        if (tiempo < 0) {
-            clearInterval(intervalo);
-            iniciarHIIT();
-        }
-    }, 1000);
-}
-
-/* ============================================================
-   🔥 PAUSA / REANUDAR / DETENER (para voz y botones)
-============================================================ */
-function pauseTraining() {
-    isPaused = true;
-    video.pause();
-    statusText.textContent = "Pausado";
-}
-
-function resumeTraining() {
-    isPaused = false;
-    video.play();
-    statusText.textContent = "Reanudado";
-}
-
-function stopTraining() {
-    detecting = false;
-    isPaused = true;
-    if (intervalo) clearInterval(intervalo);
-    if (stream) stream.getTracks().forEach(t => t.stop());
-    window.location.href = "catalogo.html";
-}
-
-/* ============================================================
-   🔥 INICIO COMPLETO
-============================================================ */
-(async function start() {
-    await initCamera();
-    await initModel();
+function initHolistic() {
+    // Verificar dependencias
+    if (typeof Holistic === 'undefined') {
+        console.error('Holistic no está cargado');
+        return;
+    }
     
-    // Configurar botones
-    document.getElementById("btnPausar").addEventListener("click", pauseTraining);
-    document.getElementById("btnDetener").addEventListener("click", stopTraining);
+    if (typeof Camera === 'undefined') {
+        console.error('Camera utils no está cargado');
+        return;
+    }
+
+    // Crear instancia de Holistic
+    holistic = new Holistic({
+        locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
+        }
+    });
+
+    holistic.setOptions({
+        modelComplexity: 1,
+        smoothLandmarks: true,
+        refineFaceLandmarks: false,
+        minDetectionConfidence: 0.6,
+        minTrackingConfidence: 0.5,
+    });
+
+    holistic.onResults(onResults);
+
+    // Inicializar cámara
+    try {
+        const camera = new Camera(videoElement, {
+            onFrame: async () => {
+                if (running && holistic) {
+                    await holistic.send({ image: videoElement });
+                }
+            },
+            width: 640,
+            height: 480,
+        });
+        camera.start();
+    } catch (error) {
+        console.error('Error al iniciar cámara:', error);
+    }
+}
+
+/* ==========================================================
+   INICIO DE LA APLICACIÓN
+========================================================== */
+
+// Esperar a que todo esté cargado
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
+
+/* ==========================================================
+   CONTROLES DE EJERCICIO
+========================================================== */
+
+function initControls() {
+    const btnPausar = document.getElementById('btnPausar');
+    const btnReanudar = document.getElementById('btnReanudar');
+    const btnDetener = document.getElementById('btnDetener');
+
+    if (btnPausar) {
+        btnPausar.addEventListener('click', function() {
+            running = false;
+            setFeedback("Ejercicio pausado ⏸");
+        });
+    }
+
+    if (btnReanudar) {
+        btnReanudar.addEventListener('click', function() {
+            running = true;
+            setFeedback("Ejercicio reanudado ▶");
+        });
+    }
+
+    if (btnDetener) {
+    btnDetener.addEventListener('click', function() {
+        running = false;
+        mostrarModalSalida();
+    });
+}
+
+}
+
+/* ==========================================================
+   EJERCICIOS ACTUALIZADOS (CON CONTEO DE REPS)
+========================================================== */
+
+function sentadillas(lm) {
+    const hip = lm[23], knee = lm[25], ankle = lm[27];
+    if (!hip || !knee || !ankle) return;
+
+    const kneeAng = angle(hip, knee, ankle);
+
+    if (kneeAng < 95 && stateA === "start") {
+        stateA = "down";
+        setFeedback("Bien bajado ✔");
+    }
+    if (kneeAng > 160 && stateA === "down") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Repetición completa 🔥 +10pts");
+    }
+}
+
+function elevaciones_brazo(lm) {
+    const shoulder = lm[11], elbow = lm[13], wrist = lm[15];
+    if (!shoulder || !elbow || !wrist) return;
+
+    const ang = angle(shoulder, elbow, wrist);
+
+    if (ang > 150 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Brazo arriba ✔");
+    }
+    if (ang < 80 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Repetición correcta 🔥 +10pts");
+    }
+}
+
+function rodillas(lm) {
+    const hip = lm[23], knee = lm[25];
+    if (!hip || !knee) return;
+
+    const diff = hip.y - knee.y;
+
+    if (diff < -0.03 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Rodilla arriba ✔");
+    }
+    if (diff > -0.01 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Bien hecho 🔥 +10pts");
+    }
+}
+
+function jumping(lm) {
+    const lAnkle = lm[27], rAnkle = lm[28];
+    if (!lAnkle || !rAnkle) return;
+
+    const d = dist(lAnkle, rAnkle);
+
+    if (d > 0.25 && stateA === "start") {
+        stateA = "open";
+        setFeedback("Piernas abiertas ✔");
+    }
+    if (d < 0.1 && stateA === "open") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Repetición correcta 🔥 +10pts");
+    }
+}
+
+function pierna(lm) {
+    const hip = lm[23], ankle = lm[27];
+    if (!hip || !ankle) return;
+
+    const diff = hip.x - ankle.x;
+
+    if (diff < -0.05 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Arriba ✔");
+    }
+    if (diff > -0.02 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Correcto 🔥 +10pts");
+    }
+}
+
+function glute_bridge(lm) {
+    const hip = lm[23], knee = lm[25];
+    if (!hip || !knee) return;
+
+    const diff = hip.y - knee.y;
+
+    if (diff < -0.03 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Cadera arriba ✔");
+    }
+    if (diff > -0.01 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Correcto 🔥 +10pts");
+    }
+}
+
+function remo_banda(lm) {
+    const shoulder = lm[11], elbow = lm[13];
+    if (!shoulder || !elbow) return;
+
+    const ang = angle({ x: shoulder.x - 0.1, y: shoulder.y, z: shoulder.z }, shoulder, elbow);
+
+    if (ang < 110 && stateA === "start") {
+        stateA = "pull";
+        setFeedback("Jala fuerte ✔");
+    }
+    if (ang > 150 && stateA === "pull") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Repetición correcta 🔥 +10pts");
+    }
+}
+
+function elevacion_talones(lm) {
+    const hip = lm[23], ankle = lm[27];
+    if (!hip || !ankle) return;
+
+    const diff = hip.y - ankle.y;
+
+    if (diff > 0.08 && stateA === "start") {
+        stateA = "up";
+        setFeedback("Arriba ✔");
+    }
+    if (diff < 0.04 && stateA === "up") {
+        rep(true);
+        stateA = "start";
+        setFeedback("Correcto 🔥 +10pts");
+    }
+}
+
+/* ==========================================================
+   ESTIRAMIENTO DE CUELLO - VERSIÓN CON REPETICIONES
+========================================================== */
+
+function estiramiento_cuello(lm) {
+    const leftEar = lm[7];
+    const rightEar = lm[8];
+    const nose = lm[0];
+
+    if (!leftEar || !rightEar || !nose) return;
+
+    const diff = leftEar.y - rightEar.y;
+
+    if (diff > 0.03 && stateA === "start") {
+        stateA = "left";
+        setFeedback("Inclina a la derecha →");
+    }
+    if (diff < -0.03 && stateA === "start") {
+        stateA = "right";
+        setFeedback("Inclina a la izquierda ←");
+    }
+    if (Math.abs(diff) < 0.02 && (stateA === "left" || stateA === "right")) {
+        rep(true);
+        stateA = "start";
+        setFeedback("Estiramiento completo 🔥 +10pts");
+    }
+}
+/* ==========================================================
+   TEMPORIZADOR HIIT
+========================================================== */
+
+function initHIITTimer() {
+    const hiitTimeElement = document.getElementById("hiit-time");
+    const hiitLabelElement = document.getElementById("hiit-label");
     
-    detectarCuentaRegresiva();
-})();
+    if (!hiitTimeElement) return;
+    
+    let timeLeft = 30;
+    const timerInterval = setInterval(() => {
+        if (running) {
+            timeLeft--;
+            hiitTimeElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+    clearInterval(timerInterval);
+    running = false;
 
-function detectarCuentaRegresiva() {
-    let count = 3;
-    countdownBox.textContent = count;
-    countdownBox.style.display = "block";
+    setFeedback("Tiempo completado");
 
-    const timer = setInterval(() => {
-        count--;
-        countdownBox.textContent = count;
+    setTimeout(() => {
+        mostrarModalSalida();
+    }, 500);
 
-        if (count === 0) {
-            clearInterval(timer);
-            countdownBox.textContent = "";
-            countdownBox.style.display = "none";
-            iniciarHIIT();
-            detecting = true;
-            detectLoop();  // ¡Loop real!
+    return;
+}
+
+
         }
     }, 1000);
 }

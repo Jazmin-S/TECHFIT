@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo Rehabilitación - TECHFIT</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/General/catalogo.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div id="menuBtn" class="menu-icon">☰</div>
+    <h1 class="header-title">TECHFIT</h1>
+    <div class="profile-icon" onclick="window.location.href='/pages/perfil.html'">
+        <img src="/img/perfil.png" alt="perfil">
+    </div>
+</nav>
+
+<div id="sidebar" class="sidebar">
+    <div class="close-btn" id="closeSidebar">✕</div>
+    <h2>Categorías</h2>
+    <a href="/pages/Catalogos/catalogo.html">Ejercicio general</a>
+    <a href="/pages/Catalogos/catalogo_rehabilitacion.html" class="active">Rehabilitación</a>
+    <a href="/pages/Catalogos/catalogo_adultos.html">Adulto mayor</a>
+    <button id="logoutBtn" class="logout-btn">🚪 Cerrar sesión</button>
+</div>
+
+<div id="overlay" class="overlay"></div>
+
+<button id="btnVoicePanel" class="voice-btn">
+    🎤 Comandos
+</button>
+
+<div id="voicePanel" class="voice-panel">
+    <h3>🎤 Comandos</h3>
+    <ul>
+        <li>“Abrir menú” / “Cerrar menú”</li>
+        <li>“Iniciar ejercicio …”</li>
+        <li>“Perfil”</li>
+        <li>“Cerrar sesión”</li>
+        <li>“Subir / Bajar”</li>
+    </ul>
+    <p class="tip">Micrófono activo</p>
+</div>
+
+<section class="contenido">
+    <h2 class="titulo-catalogo">Catálogo</h2>
+    <h3 class="subtitulo-catalogo">Rehabilitación</h3>
+
+    <div id="catalogoGrid" class="grid"></div>
+</section>
+
+<script src="/js/menu.js"></script>
+<script src="/js/Rehabilitacion/catalogo_rehabilitacion.js"></script>
+<script src="/js/voice/voice-core.js"></script>
+<script src="/js/Rehabilitacion/catalogo_rehab.js"></script>
+<script src="/js/comandos.js"></script>
+</body>
+</html>

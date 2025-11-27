@@ -1,13 +1,19 @@
+// ==============================
+//  Mostrar / ocultar contraseña
+// ==============================
 function toggleRegPass() {
     let pass = document.getElementById("regPass");
     pass.type = pass.type === "password" ? "text" : "password";
 }
 
-// Validación dinámica
+// ==============================
+//  Validación en vivo
+// ==============================
 const passInput = document.getElementById("regPass");
+
 passInput.addEventListener("input", () => {
 
-    // 🔒 Evitar más de 8 caracteres escribiendo o pegando
+    // Máximo 8 caracteres
     if (passInput.value.length > 8) {
         passInput.value = passInput.value.slice(0, 8);
     }
@@ -19,19 +25,20 @@ passInput.addEventListener("input", () => {
     document.getElementById("especial").classList.toggle("valid", /[@#$%&*!?]/.test(value));
 });
 
-// Enviar formulario
-document.getElementById("formRegistro").addEventListener("submit", function(e){
+// ==============================
+//  Enviar formulario
+// ==============================
+document.getElementById("formRegistro").addEventListener("submit", function(e) {
     e.preventDefault();
 
     const pass = this.contrasena.value;
 
-    // Requisitos
     if (
         pass.length !== 8 ||
         !/[A-Z]/.test(pass) ||
         !/[@#$%&*!?]/.test(pass)
     ) {
-        alert("La contraseña no cumple los requisitos.");
+        alert("⚠ La contraseña no cumple con los requisitos.");
         return;
     }
 
@@ -47,13 +54,27 @@ document.getElementById("formRegistro").addEventListener("submit", function(e){
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
     })
-    .then(res => res.json())
-    .then(result => {
-        if (result.status === "OK") {
-            alert("Cuenta creada con éxito 🎉");
-            window.location.href = "catalogo.html";
-        } else {
-            alert("Error: " + JSON.stringify(result));
-        }
-    });
+        .then(res => res.json())
+        .then(result => {
+
+            if (result.status === "OK") {
+                alert("🎉 Cuenta creada con éxito");
+
+                // Guardar usuario recién creado para mostrar perfil
+                localStorage.setItem("usuario", JSON.stringify(result.usuario));
+
+                // Redirigir al catálogo
+                window.location.href = "/pages/Catalogos/catalogo.html";
+            }
+            else if (result.status === "EXISTE") {
+                alert("❌ Ya existe un usuario con este correo.");
+            }
+            else {
+                alert("⚠ Hubo un error inesperado: " + JSON.stringify(result));
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("❌ Error conectando con el servidor.");
+        });
 });

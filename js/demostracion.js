@@ -1,283 +1,302 @@
-// ===============================================================
-//     CARGAR INFORMACIÓN DEL EJERCICIO DESDE LA URL
-// ===============================================================
-
-// Obtener parámetro de la URL
+// =====================================
+// OBTENER EJERCICIO DESDE LA URL
+// =====================================
 const params = new URLSearchParams(window.location.search);
 const ejercicio = params.get("ejercicio");
 
-// BASE DE DATOS COMPLETA DE EJERCICIOS
-const ejercicios = {
+// =====================================
+// BASE DE DATOS DE EJERCICIOS – VERSION PRO
+// =====================================
+const ejerciciosInfo = {
     sentadillas: {
-        titulo: "Sentadillas básicas",
-        video: "../img/videos/sentadillas.mp4",
+        titulo: "Sentadillas",
+        video: "/img/videos/sentadillas.mp4",
+        tiempo: {
+            principiante: "2 series de 10 repeticiones",
+            intermedio: "3 series de 12 repeticiones",
+            avanzado: "4 series de 15 repeticiones"
+        },
+        beneficios: [
+            "Fortalece piernas y glúteos",
+            "Mejora equilibrio y postura",
+            "Incrementa movilidad de cadera"
+        ],
         instrucciones: [
             "Coloca los pies al ancho de los hombros.",
-            "Mantén la espalda recta y el abdomen activado.",
-            "Lleva la cadera hacia atrás como si fueras a sentarte.",
-            "Baja flexionando las rodillas sin que pasen la punta de los pies.",
-            "Mantén el pecho elevado y la vista al frente.",
-            "Sube empujando desde los talones hasta regresar a la posición inicial.",
-            "Realiza el movimiento de forma controlada, sin rebotes.",
-            "Respira al bajar y exhala al subir."
-        ],
-        duracion: `
-Principiantes: 30–45 segundos  
-Descanso: 15–20 segundos  
-Series: 3  
-
-Intermedio: 45–60 segundos  
-Descanso: 15–20 segundos  
-Series: 3 a 4
-        `,
-        beneficios: [
-            "Fortalece glúteos, piernas y zona media.",
-            "Mejora la movilidad de cadera y rodillas.",
-            "Ayuda a mejorar la postura corporal.",
-            "Reduce la rigidez lumbar y de cadera.",
-            "Ejercicio seguro y de bajo impacto."
+            "Mantén la espalda recta durante todo el movimiento.",
+            "Baja la cadera como si fueras a sentarte.",
+            "Las rodillas no deben sobrepasar la punta de los pies.",
+            "Sube apretando glúteos y mantén el abdomen firme."
         ]
     },
 
     desplantes: {
         titulo: "Desplantes",
-        video: "../img/videos/desplantes.mp4",
-        instrucciones: [
-            "Da un paso amplio hacia adelante.",
-            "Mantén el torso erguido y el abdomen activado.",
-            "Flexiona ambas rodillas en un ángulo de 90°.",
-            "La rodilla trasera baja hacia el suelo sin tocarlo.",
-            "Impulsa con la pierna delantera para volver.",
-            "Alterna ambas piernas manteniendo equilibrio.",
-            "Evita que la rodilla delantera se vaya hacia adentro.",
-            "Mantén un ritmo lento y controlado."
-        ],
-        duracion: `
-Principiantes: 20–30 segundos  
-Intermedio: 45 segundos  
-Series: 3
-        `,
+        video: "/img/videos/desplantes.mp4",
+        tiempo: {
+            principiante: "2 series de 8 por pierna",
+            intermedio: "3 series de 10 por pierna",
+            avanzado: "4 series de 12 por pierna"
+        },
         beneficios: [
-            "Fortalece glúteos, cuádriceps e isquiotibiales.",
-            "Mejora estabilidad y equilibrio.",
-            "Ayuda a corregir asimetrías musculares.",
-            "Ideal para tonificación de piernas.",
-            "Mejora coordinación motriz."
+            "Fortalece piernas y glúteos",
+            "Mejora estabilidad en rodillas",
+            "Ayuda a tonificar piernas"
+        ],
+        instrucciones: [
+            "Da un paso largo hacia adelante.",
+            "Flexiona ambas rodillas en ángulos de 90°.",
+            "Mantén la espalda recta.",
+            "Impúlsate hacia atrás para volver a la posición inicial."
         ]
     },
 
     elevaciones_brazo: {
         titulo: "Elevaciones de brazo",
-        video: "../img/videos/elevacion_brazo.mp4",
-        instrucciones: [
-            "Colócate de pie con pies separados al ancho de cadera.",
-            "Mantén la espalda recta y el abdomen firme.",
-            "Levanta un brazo hacia el frente sin bloquear el codo.",
-            "Evita encoger los hombros.",
-            "Baja el brazo lentamente.",
-            "Repite con el otro brazo.",
-            "Controla la respiración: exhala al levantar.",
-            "Puedes usar pesas ligeras si deseas aumentar dificultad."
-        ],
-        duracion: `
-Principiantes: 20–30 segundos  
-Intermedio: 40–50 segundos  
-Series: 3
-        `,
+        video: "/img/videos/elevacion_brazo.mp4",
+        tiempo: {
+            principiante: "2 series de 12 repeticiones",
+            intermedio: "3 series de 15 repeticiones",
+            avanzado: "4 series de 20 repeticiones"
+        },
         beneficios: [
-            "Fortalece deltoides y hombros.",
-            "Mejora movilidad articular.",
-            "Ideal para rehabilitación de hombro.",
-            "Aumenta resistencia del tren superior.",
-            "Ayuda a corregir postura."
+            "Fortalece hombros",
+            "Mejora movilidad de articulación del hombro",
+            "Ayuda a corregir postura"
+        ],
+        instrucciones: [
+            "Levanta el brazo hasta la altura del hombro.",
+            "Evita encoger el hombro hacia la oreja.",
+            "Controla el movimiento al subir y bajar.",
+            "Mantén abdomen firme."
         ]
     },
 
     flexiones_pared: {
-        titulo: "Flexiones en pared",
-        video: "../img/videos/flexion_pared.mp4",
-        instrucciones: [
-            "Colócate frente a una pared a medio metro de distancia.",
-            "Apoya las manos a la altura del pecho.",
-            "Mantén el cuerpo alineado (sin arquear la espalda).",
-            "Flexiona los ejes y acerca el pecho a la pared.",
-            "Empuja para volver a la posición inicial.",
-            "Controla la respiración durante el movimiento.",
-            "Evita que los codos se abran demasiado.",
-            "Perfecto para principiantes o rehabilitación."
-        ],
-        duracion: `
-Principiantes: 20–30 segundos  
-Intermedio: 45 segundos  
-Series: 3
-        `,
+        titulo: "Flexiones de pared",
+        video: "/img/videos/flexion_pared.mp4",
+        tiempo: {
+            principiante: "2 series de 10 repeticiones",
+            intermedio: "3 series de 12 repeticiones",
+            avanzado: "4 series de 15 repeticiones"
+        },
         beneficios: [
-            "Fortalece pecho, hombros y tríceps.",
-            "Mejora estabilidad de muñecas.",
-            "Evita compresión excesiva del hombro.",
-            "Ideal para adultos mayores o lesiones.",
-            "Aumenta fuerza funcional."
+            "Fortalece pecho y brazos",
+            "Ideal para principiantes y rehabilitación",
+            "Reduce carga sobre articulaciones"
+        ],
+        instrucciones: [
+            "Apoya las manos en la pared al nivel del pecho.",
+            "Baja el pecho hacia la pared flexionando los codos.",
+            "Mantén el cuerpo recto.",
+            "Empuja de regreso extendiendo los brazos."
         ]
     },
 
     plancha: {
-        titulo: "Plancha básica",
-        video: "../img/videos/plancha.mp4",
-        instrucciones: [
-            "Coloca antebrazos y puntas de los pies en el suelo.",
-            "Activa el abdomen manteniendo la espalda recta.",
-            "Evita elevar demasiado la cadera.",
-            "Mantén el cuello alineado con la columna.",
-            "Respira de manera suave y constante.",
-            "No arquees la zona lumbar.",
-            "Mantén la tensión sin bloquear la respiración.",
-            "Ideal para fortalecer abdomen profundo."
-        ],
-        duracion: `
-Principiantes: 15–25 segundos  
-Intermedio: 30–45 segundos  
-Series: 3
-        `,
+        titulo: "Plancha",
+        video: "/img/videos/plancha.mp4",
+        tiempo: {
+            principiante: "3 series de 15–20 segundos",
+            intermedio: "3 series de 30–40 segundos",
+            avanzado: "3 series de 60 segundos"
+        },
         beneficios: [
-            "Fortalece abdomen completo.",
-            "Reduce dolor lumbar.",
-            "Mejora postura y equilibrio.",
-            "Activa glúteos y espalda baja.",
-            "Ejercicio de bajo impacto y muy seguro."
+            "Fortalece abdomen y zona lumbar",
+            "Mejora estabilidad del core",
+            "Ayuda a prevenir dolores de espalda"
+        ],
+        instrucciones: [
+            "Apoya antebrazos y puntas de los pies.",
+            "Mantén el cuerpo completamente recto.",
+            "Activa abdomen y glúteos.",
+            "Evita levantar demasiado la cadera."
         ]
     },
 
     rodillas: {
         titulo: "Elevación de rodillas",
-        video: "../img/videos/rodillas.mp4",
-        instrucciones: [
-            "Mantente de pie con postura recta.",
-            "Eleva una rodilla hacia el pecho sin inclinarte.",
-            "Activa el abdomen durante el movimiento.",
-            "Alterna piernas a un ritmo controlado.",
-            "No golpees el pie contra el suelo al bajar.",
-            "Evita inclinar el torso hacia atrás.",
-            "Respira coordinado con las repeticiones."
-        ],
-        duracion: `
-Principiantes: 20–30 segundos  
-Intermedio: 45 segundos  
-Series: 3
-        `,
+        video: "/img/videos/rodillas.mp4",
+        tiempo: {
+            principiante: "2 series de 20 repeticiones",
+            intermedio: "3 series de 30 repeticiones",
+            avanzado: "3 series de 40 repeticiones"
+        },
         beneficios: [
-            "Mejora coordinación y equilibrio.",
-            "Aumenta resistencia cardiovascular leve.",
-            "Activa abdomen y flexores de cadera.",
-            "Ideal para entrar en calor.",
-            "Mejora movilidad de piernas."
+            "Mejora coordinación",
+            "Aumenta resistencia",
+            "Activa muslos y abdomen"
+        ],
+        instrucciones: [
+            "Eleva una rodilla al pecho.",
+            "Alterna de manera fluida.",
+            "Mantén el torso firme.",
+            "Mantén ritmo constante."
         ]
     },
 
     jumping: {
-        titulo: "Jumping jacks modificados",
-        video: "../img/videos/jumping.mp4",
-        instrucciones: [
-            "Da un paso lateral y eleva ambos brazos.",
-            "Regresa al centro y cambia al otro lado.",
-            "Mantén las rodillas ligeramente flexionadas.",
-            "Evita impacto fuerte sobre tobillos.",
-            "Controla el movimiento de brazos.",
-            "Mantén respiración constante.",
-            "Perfecto como cardio ligero o calentamiento."
-        ],
-        duracion: `
-Principiantes: 20–30 segundos  
-Intermedio: 40–50 segundos  
-Series: 3
-        `,
+        titulo: "Jumping jacks",
+        video: "/img/videos/jumping.mp4",
+        tiempo: {
+            principiante: "2 series de 20 segundos",
+            intermedio: "3 series de 30 segundos",
+            avanzado: "3 series de 45–60 segundos"
+        },
         beneficios: [
-            "Aumenta resistencia cardiovascular.",
-            "Activa brazos, piernas y core.",
-            "Mejora coordinación.",
-            "Cardio de bajo impacto.",
-            "Ayuda a quemar calorías."
+            "Excelente ejercicio cardiovascular",
+            "Mejora coordinación",
+            "Activa brazos, piernas y abdomen"
+        ],
+        instrucciones: [
+            "Salta abriendo piernas y brazos.",
+            "Cierra piernas y baja brazos en el siguiente salto.",
+            "Mantén ritmo constante.",
+            "Aterriza suave para proteger articulaciones."
         ]
     },
 
     pierna: {
         titulo: "Elevaciones laterales de pierna",
-        video: "../img/videos/pierna.mp4",
-        instrucciones: [
-            "Acuéstate de lado apoyando el codo.",
-            "Mantén piernas alineadas.",
-            "Eleva la pierna superior lentamente.",
-            "Evita rotar la cadera hacia atrás.",
-            "Baja con control sin dejar caer la pierna.",
-            "Cambia al otro lado después de terminar.",
-            "Controla tu respiración durante el movimiento."
-        ],
-        duracion: `
-Principiantes: 12–15 repeticiones por lado  
-Intermedio: 20 repeticiones  
-Series: 3
-        `,
+        video: "/img/videos/pierna.mp4",
+        tiempo: {
+            principiante: "2 series de 10 por pierna",
+            intermedio: "3 series de 12 por pierna",
+            avanzado: "4 series de 15 por pierna"
+        },
         beneficios: [
-            "Fortalece glúteo medio.",
-            "Mejora estabilidad de cadera.",
-            "Previene dolor lumbar.",
-            "Tonifica piernas y glúteos.",
-            "Ideal para fortalecer abductores."
+            "Tonifica glúteo medio",
+            "Mejora estabilidad de cadera",
+            "Corrige desbalances musculares"
+        ],
+        instrucciones: [
+            "Apóyate de una pared o silla.",
+            "Levanta la pierna hacia el lateral sin rotar la cadera.",
+            "Controla bajada y subida.",
+            "Activa abdomen."
+        ]
+    },
+    glute_bridge: {
+        titulo: "Puente de glúteo",
+        video: "/img/videos/glute_bridge.mp4",
+        tiempo: {
+            principiante: "2 series de 12 repeticiones",
+            intermedio: "3 series de 15 repeticiones",
+            avanzado: "4 series de 20 repeticiones"
+    },
+        beneficios: [
+            "Fortalece glúteos y zona lumbar",
+            "Mejora estabilidad de cadera",
+            "Ayuda a aliviar dolor lumbar"
+    ],
+        instrucciones: [
+            "Acuéstate boca arriba con rodillas flexionadas.",
+            "Coloca los pies separados al ancho de cadera.",
+            "Eleva la cadera apretando glúteos.",
+            "Mantén 1 segundo arriba.",
+            "Baja la cadera controlando el movimiento."
+    ]
+    },
+        remo_banda: {
+        titulo: "Remo con banda elástica",
+        video: "/img/videos/remo_banda.mp4",
+        tiempo: {
+            principiante: "2 series de 10 repeticiones",
+            intermedio: "3 series de 12 repeticiones",
+            avanzado: "4 series de 15 repeticiones"
+        },
+        beneficios: [
+            "Fortalece espalda alta y media",
+            "Mejora postura",
+            "Ayuda a reducir dolor de espalda"
+        ],
+        instrucciones: [
+            "Siéntate o párate con la espalda recta.",
+            "Sujeta la banda con ambas manos.",
+            "Lleva los codos hacia atrás pegados al cuerpo.",
+            "Aprieta omóplatos al final del movimiento.",
+            "Regresa lentamente."
+        ]
+    },
+        talones: {
+        titulo: "Elevación de talones",
+        video: "/img/videos/talones.mp4",
+        tiempo: {
+            principiante: "2 series de 12 repeticiones",
+            intermedio: "3 series de 15 repeticiones",
+            avanzado: "4 series de 20 repeticiones"
+        },
+        beneficios: [
+            "Fortalece pantorrillas",
+            "Mejora equilibrio",
+            "Reduce riesgo de lesiones en tobillo"
+        ],
+        instrucciones: [
+            "Párate con los pies al ancho de hombros.",
+            "Eleva los talones lo más alto posible.",
+            "Mantén 1 segundo arriba.",
+            "Baja lentamente controlando el movimiento."
+        ]
+    },
+        estiramiento_cuello: {
+        titulo: "Estiramiento de cuello",
+        video: "/img/videos/estiramiento_cuello.mp4",
+        tiempo: {
+            principiante: "2 series de 10 segundos por lado",
+            intermedio: "2 series de 20 segundos por lado",
+            avanzado: "3 series de 30 segundos por lado"
+        },
+        beneficios: [
+            "Reduce tensión en cuello y hombros",
+            "Disminuye dolores de cabeza por postura",
+            "Mejora movilidad cervical"
+        ],
+        instrucciones: [
+            "Lleva lentamente tu oreja hacia un hombro.",
+            "Relaja hombros sin levantarlos.",
+            "Mantén la postura sin forzar.",
+            "Repite hacia el otro lado.",
+            "Respira profundo durante el estiramiento."
         ]
     }
 };
 
 
-// ===============================================================
-//             RENDER DEL EJERCICIO SELECCIONADO
-// ===============================================================
-
-if (ejercicios[ejercicio]) {
-
-    const data = ejercicios[ejercicio];
+// =====================================
+// CARGAR INFORMACIÓN EN LA PANTALLA
+// =====================================
+if (!ejercicio || !ejerciciosInfo[ejercicio]) {
+    document.getElementById("titulo-ejercicio").textContent = "Ejercicio no encontrado";
+} else {
+    const data = ejerciciosInfo[ejercicio];
 
     // Título
     document.getElementById("titulo-ejercicio").textContent = data.titulo;
 
-    // Video dinámico
-    document.getElementById("video-container").innerHTML = `
-        <video id="video-ejercicio" class="img-demo" controls>
-            <source src="${data.video}" type="video/mp4">
-            Tu navegador no soporta video.
-        </video>
-    `;
+    // Video
+    const video = document.getElementById("video-ejercicio");
+    video.src = data.video;
 
     // Instrucciones
-    const instList = document.getElementById("lista-instrucciones");
-    data.instrucciones.forEach(paso => {
+    const lista = document.getElementById("lista-instrucciones");
+    lista.innerHTML = "";
+    data.instrucciones.forEach(t => {
         const li = document.createElement("li");
-        li.textContent = paso;
-        instList.appendChild(li);
+        li.textContent = t;
+        lista.appendChild(li);
     });
 
-    // Duración
-    document.getElementById("texto-duracion").innerText = data.duracion;
-
     // Beneficios
-    const beneList = document.getElementById("lista-beneficios");
+    const benef = document.getElementById("beneficios");
+    benef.innerHTML = "";
     data.beneficios.forEach(b => {
         const li = document.createElement("li");
         li.textContent = b;
-        beneList.appendChild(li);
+        benef.appendChild(li);
     });
 
-} else {
-    document.getElementById("titulo-ejercicio").textContent = "Ejercicio no encontrado.";
-}
-
-
-// ===============================================================
-//     BOTÓN INICIAR → ejecución.html
-// ===============================================================
-
-const btnIniciar = document.getElementById("btnIniciar");
-
-if (btnIniciar) {
-    btnIniciar.addEventListener("click", () => {
-        window.location.href = `ejecucion.html?ejercicio=${ejercicio}`;
-    });
+    // Tiempo por nivel
+    document.getElementById("tiempo-principiante").textContent = data.tiempo.principiante;
+    document.getElementById("tiempo-intermedio").textContent = data.tiempo.intermedio;
+    document.getElementById("tiempo-avanzado").textContent = data.tiempo.avanzado;
 }

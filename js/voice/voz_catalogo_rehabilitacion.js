@@ -1,124 +1,152 @@
-// =====================================================
-//   VOZ DEMOSTRACIÓN REHABILITACIÓN
-//   Comandos:
-//     - "iniciar ejercicio"
-//     - "pausar video" / "reproducir video"
-//     - "salir"
-// =====================================================
 
 (function () {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    console.warn("Voz catálogo rehab: API de voz no soportada");
+    return;
+  }
 
-    // Solo ejecutar en la página de demostración
-    const tituloDemo = document.getElementById("titulo-ejercicio");
-    const video = document.getElementById("video-ejercicio");
-    const btnIniciar = document.getElementById("btnIniciar");
+  const reco = new SR();
+  reco.lang = "es-MX";
+  reco.continuous = true;
+  reco.interimResults = false;
 
-    if (!tituloDemo || !video || !btnIniciar) {
-        console.warn("voz_demostracion_rehab.js: no es la página de demostración, se omite.");
-        return;
-    }
+  function normalizar(texto) {
+    return texto
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, ""); // quita tildes
+  }
 
-    if (!window.infoRehab) {
-        console.warn("voz_demostracion_rehab.js: infoRehab no está disponible.");
-    }
-
-    // Web Speech API
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-        console.warn("Este navegador no soporta reconocimiento de voz.");
-        return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = "es-MX";
-    recognition.continuous = true;
-    recognition.interimResults = false;
-
-    let escuchando = false;
-
-    function iniciarEscucha() {
-        if (!escuchando) {
-            try {
-                recognition.start();
-                escuchando = true;
-                console.log("🎤 Reconocimiento de voz iniciado (rehab).");
-            } catch (e) {
-                console.warn("No se pudo iniciar reconocimiento:", e);
-            }
-        }
-    }
-
-    function detenerEscucha() {
-        if (escuchando) {
-            recognition.stop();
-            escuchando = false;
-            console.log("🎤 Reconocimiento de voz detenido (rehab).");
-        }
-    }
-
-    // Obtener ejercicio actual
-    function obtenerEjercicioActual() {
-        const q = new URLSearchParams(window.location.search);
-        const ej = q.get("ejercicio");
-        if (!window.infoRehab) return null;
-        return window.infoRehab[ej] || null;
-    }
-
-    function procesarComando(texto) {
-        const comando = texto.toLowerCase();
-        console.log("🗣 Comando detectado:", comando);
-
-        // Iniciar ejercicio (ir a ejecución)
-        if (comando.includes("iniciar ejercicio")) {
-            btnIniciar.click();
-            return;
-        }
-
-        // Pausar / reproducir video
-        if (comando.includes("pausar") || comando.includes("poner pausa")) {
-            video.pause();
-            return;
-        }
-
-        if (comando.includes("reproducir") || comando.includes("reanudar") || comando.includes("play")) {
-            video.play();
-            return;
-        }
-
-        // Salir (regresar al catálogo)
-        if (comando.includes("salir")) {
-            window.location.href = "/pages/Catalogos/catalogo_rehabilitacion.html";
-            return;
-        }
-    }
-
-    recognition.onresult = (event) => {
-        const results = event.results;
-        const last = results[results.length - 1];
-        const texto = last[0].transcript.trim();
-        procesarComando(texto);
-    };
-
-    recognition.onerror = (event) => {
-        console.warn("Error en reconocimiento de voz:", event.error);
-        // Si se cortó, intentar reanudar para que quede siempre activo
-        if (event.error === "no-speech" || event.error === "network") {
-            detenerEscucha();
-            setTimeout(iniciarEscucha, 1000);
-        }
-    };
-
-    recognition.onend = () => {
-        // Mantener siempre escuchando
-        if (escuchando) {
-            setTimeout(iniciarEscucha, 300);
-        }
-    };
-
-    // Iniciar automáticamente al cargar la página
-    window.addEventListener("load", () => {
-        iniciarEscucha();
+  function scrollCantidad(delta) {
+    window.scrollBy({
+      top: delta,
+      behavior: "smooth",
     });
+  }
 
+  // --- función que abre la página de demostración según nombre ---
+  function abrirEjercicioPorNombre(nombre) {
+    // nombre ya viene normalizado (sin tildes, en minúsculas)
+    if (!nombre) return false;
+
+    // HOMBRO
+    if (
+      nombre.includes("hombro") ||
+      nombre.includes("movilidad de hombro")
+    ) {
+      window.location.href =
+        "/pages/demostracion_rehabilitacion.html?ejercicio=hombro_banda";
+      return true;
+    }
+
+    // ELEVACIÓN DE PIERNA
+    if (
+      nombre.includes("pierna") ||
+      nombre.includes("elevacion de pierna acostado") ||
+      nombre.includes("elevacion pierna") ||
+      nombre.includes("pierna acostado")
+    ) {
+      window.location.href =
+        "/pages/demostracion_rehabilitacion.html?ejercicio=elevacion_pierna_rehab";
+      return true;
+    }
+
+    // CAMINATA LATERAL
+    if (nombre.includes("caminata lateral con banda") || nombre.includes("lateral")) {
+      window.location.href =
+        "/pages/demostracion_rehabilitacion.html?ejercicio=caminata_banda";
+      return true;
+    }
+
+    // RODILLA
+    if (nombre.includes("rodilla") || nombre.includes("extenciíon de rodilla")) {
+      window.location.href =
+        "/pages/demostracion_rehabilitacion.html?ejercicio=rodilla_rehab";
+      return true;
+    }
+
+    // LUMBAR
+    if (nombre.includes("estiramiento lumbar") || nombre.includes("espalda baja")) {
+      window.location.href =
+        "/pages/demostracion_rehabilitacion.html?ejercicio=lumbar";
+      return true;
+    }
+
+    // TOBILLO
+    if (nombre.includes("tobillo") || nombre.includes("movilidad de tobillo")) {
+      window.location.href =
+        "/pages/demostracion_rehabilitacion.html?ejercicio=tobillo_rehab";
+      return true;
+    }
+
+    return false;
+  }
+
+  reco.onresult = (event) => {
+    const result = event.results[event.results.length - 1][0].transcript;
+    const frase = normalizar(result).trim();
+    console.log("[voz catálogo rehab] ->", frase);
+
+    // ---------- COMANDO GENÉRICO: "iniciar ejercicio [nombre]" ----------
+    if (frase.startsWith("iniciar ejercicio")) {
+      const nombre = frase.replace("iniciar ejercicio", "").trim();
+      abrirEjercicioPorNombre(nombre);
+      return;
+    }
+
+    // ---------- ATAJOS CORTOS (por si el usuario solo dice la palabra) ----------
+
+    if (abrirEjercicioPorNombre(frase)) {
+      return; // si ya abrió un ejercicio, cortamos
+    }
+
+    // ---------- MENÚ, PERFIL, SESIÓN ----------
+
+    if (frase.includes("abrir menu") || frase.includes("mostrar menu")) {
+      const menuBtn = document.getElementById("menuBtn");
+      if (menuBtn) menuBtn.click();
+    }
+
+    if (
+      frase.includes("cerrar menu") ||
+      frase.includes("ocultar menu") ||
+      frase.includes("quitar menu")
+    ) {
+      const closeSidebar = document.getElementById("closeSidebar");
+      if (closeSidebar) closeSidebar.click();
+    }
+
+    if (frase === "perfil" || frase.includes("ir a perfil")) {
+      window.location.href = "/pages/perfil.html";
+    }
+
+    if (
+      frase.includes("cerrar sesion") ||
+      frase.includes("cerrar sesión") ||
+      frase.includes("cerrar cuenta")
+    ) {
+      const logoutBtn = document.getElementById("logoutBtn");
+      if (logoutBtn) logoutBtn.click();
+    }
+
+    // ---------- SCROLL ----------
+
+    if (frase.includes("bajar") || frase.includes("abajo")) {
+      scrollCantidad(window.innerHeight * 0.6);
+    }
+
+    if (frase.includes("subir") || frase.includes("arriba")) {
+      scrollCantidad(-window.innerHeight * 0.6);
+    }
+  };
+
+  reco.onend = () => {
+    // Lo mantenemos siempre escuchando en esta página
+    reco.start();
+  };
+
+  window.addEventListener("load", () => {
+    reco.start();
+  });
 })();

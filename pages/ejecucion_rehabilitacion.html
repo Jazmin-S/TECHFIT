@@ -75,15 +75,32 @@
             <button id="btnReiniciarEj" type="button">Reiniciar</button>
             <button id="btnSalirEj" type="button">Salir</button>
 
-            <!-- panel de voz (listo por si luego lo usas) -->
+            <!-- BOTÓN DE COMANDOS -->
+            <button id="btnVoicePanel" type="button" class="voice-btn">
+                🎤 Comandos
+            </button>
+
+            <!-- PANEL DE COMANDOS DE VOZ -->
             <div id="voicePanel" class="voice-panel">
-                <p><strong>Comandos (futuros):</strong></p>
+                <h3>🎤 Comandos de voz (Ejecución)</h3>
                 <ul>
-                    <li>“Iniciar ejercicio”</li>
-                    <li>“Pausar ejercicio” / “Reanudar ejercicio”</li>
-                    <li>“Reiniciar ejercicio”</li>
-                    <li>“Salir”</li>
+                    <!-- Control básico -->
+                    <li><strong>“Iniciar ejercicio”</strong></li>
+                    <li><strong>“Pausar ejercicio”</strong></li>
+                    <li><strong>“Continuar ejercicio”</strong></li>
+                    <li><strong>“Reiniciar ejercicio”</strong></li>
+                    <li><strong>“Salir”</strong></li>
+                    <li><strong>“Sí salir”</strong></li>
+                    <li><strong>“Seguir”</strong> </li>
+
+                    <!-- Retroalimentación -->
+                    <li><strong>“Repeticiones”</strong></li>
+                    <li><strong>“Tiempo transcurrido”</strong></li>
+                    <li><strong>“Tiempo que queda”</strong></li>
+                    <li><strong>“Estado”</strong></li>
+                    <li><strong>“Motívame”</strong></li>
                 </ul>
+                <p class="tip">El micrófono está escuchando en esta pantalla.</p>
             </div>
         </div>
 
@@ -101,6 +118,7 @@
         </div>
     </div>
 
+
     <!-- JS DE LA PÁGINA -->
     <script src="/js/Rehabilitacion/ejecucion_rehab.js"></script>
 
@@ -110,6 +128,11 @@
 
     <!-- Cámara + IA para rehabilitación -->
     <script src="/js/Rehabilitacion/camara_rehab.js"></script>
+
+    <!-- VOZ ejecución rehabilitación (comandos + feedback) -->
+    <script src="/js/voice/voz_ejecucion_rehab.js"></script>
+    <!-- JS para abrir / cerrar el panel de comandos -->
+    <script src="/js/voice/voz_panel_ejecucion_rehab.js"></script>
 
 </body>
 </html>

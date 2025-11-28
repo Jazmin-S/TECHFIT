@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>TECHFIT - Adulto mayor - Ejecución</title>
+
+    <!-- Reutilizamos el mismo CSS de ejecución general -->
+    <link rel="stylesheet" href="/css/General/ejecucion.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <button class="back-btn"
+                type="button"
+                onclick="window.location.href='/pages/Catalogos/catalogo_adultos.html'">
+            ←
+        </button>
+
+        <h1 class="header-title">Adulto mayor - Ejecución</h1>
+
+        <img id="miniPerfil"
+             class="perfil-mini"
+             src="/img/user_default.png"
+             alt="Perfil"
+             onclick="window.location.href='/pages/perfil.html'" />
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <section class="exec-container">
+
+        <!-- TARJETA CÁMARA -->
+        <div class="camera-card">
+            <h2 id="titulo-ejercicio">Ejercicio para adulto mayor</h2>
+
+            <div class="camera-wrapper">
+                <!-- video de la cámara -->
+                <video id="video" autoplay muted playsinline></video>
+                <!-- canvas para IA -->
+                <canvas id="poseCanvas"></canvas>
+            </div>
+
+            <!-- HUD -->
+            <div class="hud">
+                <div class="hud-item">Reps: <span id="reps">0</span></div>
+                <div class="hud-item">Tiempo: <span id="tiempo">00:00</span></div>
+                <div class="hud-item">Estado: <span id="estado">En espera</span></div>
+            </div>
+
+            <!-- LUCES -->
+            <div class="lights">
+                <div class="light ok" id="light-ok"></div>
+                <div class="light bad" id="light-bad"></div>
+            </div>
+
+            <!-- FEEDBACK -->
+            <div class="feedback" id="feedback">
+                Ejercicio listo para comenzar.
+            </div>
+
+            <!-- TIMER HIIT (si usas intervalos también aquí) -->
+            <div class="hiit-timer">
+                Intervalo: <span id="hiit-phase">Preparado</span> —
+                <span id="hiit-time">00:00</span>
+            </div>
+
+            <!-- ejercicio actual para otros JS -->
+            <input type="hidden" id="ejercicio-actual" value="">
+        </div>
+
+        <!-- TARJETA CONTROLES -->
+        <div class="controls-card">
+            <button id="btnIniciarEj" type="button">Iniciar</button>
+            <button id="btnPausarEj" type="button">Pausar</button>
+            <button id="btnReiniciarEj" type="button">Reiniciar</button>
+            <button id="btnSalirEj" type="button">Salir</button>
+
+            <!-- BOTÓN DE COMANDOS -->
+            <button id="btnVoicePanel" type="button" class="voice-btn">
+                🎤 Comandos
+            </button>
+
+            <!-- PANEL DE COMANDOS DE VOZ -->
+            <div id="voicePanel" class="voice-panel">
+                <h3>🎤 Comandos de voz (Ejecución adulto mayor)</h3>
+                <ul>
+                    <!-- Control básico -->
+                    <li><strong>“Iniciar ejercicio”</strong></li>
+                    <li><strong>“Pausar ejercicio”</strong></li>
+                    <li><strong>“Continuar ejercicio”</strong></li>
+                    <li><strong>“Reiniciar ejercicio”</strong></li>
+                    <li><strong>“Salir”</strong></li>
+                    <li><strong>“Sí salir”</strong></li>
+                    <li><strong>“Seguir”</strong></li>
+
+                    <!-- Retroalimentación -->
+                    <li><strong>“Repeticiones”</strong></li>
+                    <li><strong>“Tiempo transcurrido”</strong></li>
+                    <li><strong>“Tiempo que queda”</strong></li>
+                    <li><strong>“Estado”</strong></li>
+                    <li><strong>“Motívame”</strong></li>
+                </ul>
+                <p class="tip">El micrófono está escuchando en esta pantalla.</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- MODAL DE SALIDA -->
+    <div id="exitModal" class="exit-modal hidden">
+        <div class="exit-modal-content">
+            <h3>¿Deseas salir del ejercicio?</h3>
+            <p>Puedes continuar o regresar al catálogo de adulto mayor.</p>
+            <div class="modal-buttons">
+                <button id="seguirBtn">Seguir</button>
+                <button id="salirBtn" class="danger">Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS principal de ejecución adultos -->
+    <script src="/js/Adultos/ejecucion_adultos.js"></script>
+
+    <!-- IA de pose desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"
+            crossorigin="anonymous"></script>
+
+    <!-- Cámara + IA para adultos (similar a camara_rehab pero adaptado) -->
+    <script src="/js/Adultos/camara_adultos.js"></script>
+
+    <!-- VOZ ejecución adultos (comandos + feedback) -->
+    <script src="/js/voice/voz_ejecucion_adultos.js"></script>
+    <!-- JS para abrir / cerrar el panel de comandos -->
+    <script src="/js/voice/voz_panel_ejecucion_adultos.js"></script>
+
+</body>
+</html>

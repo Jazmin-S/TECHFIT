@@ -27,6 +27,8 @@
 
     <!-- CÁMARA -->
     <section class="camera-card">
+        
+        <div class="camera-status" id="cameraStatus">Cámara: Activa • Temporizador: Activo</div>
 
         <div class="camera-wrapper">
             <video id="video" autoplay playsinline></video>
@@ -42,17 +44,18 @@
 
         <!-- LUCES -->
         <div class="lights">
-            <div id="light-ok" class="light ok"></div>
+            <div id="light-ok" class="light ok"></="light">
             <div id="light-bad" class="light bad"></div>
         </div>
 
         <!-- FEEDBACK -->
-        <p id="feedback" class="feedback"></p>
+        <p id="feedback" class="feedback">Preparado para comenzar...</p>
 
         <!-- HIIT TIMER -->
         <div class="hiit-timer">
             <h2 id="hiit-label">HIIT: Ejercicio</h2>
             <span id="hiit-time">30</span>s
+            <div id="timer-status" style="font-size: 12px; margin-top: 5px;">Activo</div>
         </div>
 
     </section>
@@ -70,11 +73,12 @@
         <div id="voiceCommandsPanel" class="voice-panel">
             <h3>Comandos disponibles:</h3>
             <ul>
-                <li>“Pausar”</li>
-                <li>“Continuar”</li>
+                <li>“Pausar” / “Pausa” / “Parar”</li>
+                <li>“Seguir” / “Continuar” / “Reanudar”</li>
                 <li>“Detener”</li>
                 <li>“Tiempo”</li>
                 <li>“Salir”</li>
+                <li>Modos: “Modo intenso”, “Modo recuperativo”, “Modo nocturno”, “Modo silencioso”, “Modo normal”, “Modo power”</li>
             </ul>
         </div>
 
@@ -82,14 +86,14 @@
 
 </main>
 
-<!-- JS -->
+<!-- JS MEDIAPIPE -->
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
 
 <script>
-    // Cargar el nombre del ejercicio
+    // Cargar el nombre del ejercicio y la foto de perfil
     document.addEventListener('DOMContentLoaded', function() {
         const params = new URLSearchParams(window.location.search);
         const ejercicio = params.get("ejercicio");
@@ -103,9 +107,13 @@
     });
 </script>
 
+<!-- LÓGICA DE CÁMARA + DETECTOR -->
 <script src="/js/camara.js"></script>
+
+<!-- VOZ DE EJECUCIÓN -->
 <script src="/js/voice/voice-ejecucion.js"></script>
 
+<!-- MODAL DE SALIDA -->
 <div id="exitModal" class="exit-modal hidden">
     <div class="exit-modal-content">
         <h3>¿Deseas continuar o salir?</h3>

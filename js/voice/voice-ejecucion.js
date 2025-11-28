@@ -1,5 +1,5 @@
 // =======================================================
-//  VOZ PARA EJECUCIÓN – COMANDOS EXACTOS + MODOS + MOTIVACIÓN
+//  VOZ PARA EJECUCIÓN – COMANDOS + MODOS + MOTIVACIÓN
 // =======================================================
 
 let recognitionEj = null;
@@ -11,9 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("voiceHelpBtn");
     const panel = document.getElementById("voiceCommandsPanel");
 
-    btn.addEventListener("click", () => {
-        panel.classList.toggle("active");
-    });
+    if (btn && panel) {
+        btn.addEventListener("click", () => {
+            panel.classList.toggle("active");
+        });
+    }
 
     initVoiceExecution();
 });
@@ -104,7 +106,6 @@ function initVoiceExecution() {
     recognitionEj.onresult = (event) => {
         let comando = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
 
-        // Limpieza
         comando = comando
             .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             .replace(/[^\w\s]/gi, "")
@@ -112,36 +113,35 @@ function initVoiceExecution() {
 
         console.log("🎤 Comando detectado:", comando);
 
-        // ------------------------------
-        //  MAPA DE COMANDOS EXACTOS
-        // ------------------------------
         const comandosAceptados = {
+            // PAUSA
             "pausar": "pausar",
             "pausa": "pausar",
             "pasar": "pausar",
             "posar": "pausar",
             "pausa r": "pausar",
+            "parar": "pausar",
 
+            // REANUDAR
             "reanudar": "reanudar",
             "seguir": "reanudar",
             "continuar": "reanudar",
 
-            // --- DETENER REAL ---
+            // DETENER (sin salir, solo detener y mostrar modal)
             "detener": "detener",
             "detener ejercicio": "detener",
             "finalizar ejercicio": "detener",
 
-            // Parar = pausa para evitar confusiones
-            "parar": "pausar",
-
+            // TIEMPO
             "tiempo": "tiempo",
 
+            // VOLUMEN
             "subir volumen": "subir-volumen",
             "bajar volumen": "bajar-volumen",
             "subir bolumen": "subir-volumen",
             "bajar bolumen": "bajar-volumen",
 
-            // --- SALIR REAL ---
+            // SALIR REAL
             "salir": "salir",
             "salir del ejercicio": "salir",
 
@@ -157,41 +157,47 @@ function initVoiceExecution() {
         };
 
         let accion = comandosAceptados[comando];
-        if (!accion) return; // comando inválido → IGNORAR
+        if (!accion) return;
 
         const video = document.getElementById("video");
-        const timer = document.getElementById("timer")?.textContent || "0:00";
+        const hiitTimeEl = document.getElementById("hiit-time");
+        const timerText = hiitTimeEl ? hiitTimeEl.textContent : "0";
+
         const reps = document.getElementById("hud-reps")?.textContent || "0";
         const score = document.getElementById("hud-score")?.textContent || "0";
 
-        // ------------------------------
-        //    EJECUCIÓN DE ACCIONES
-        // ------------------------------
+        console.log("Estado actual → tiempo:", timerText, "reps:", reps, "score:", score);
+
         switch (accion) {
 
             case "pausar":
-                if (typeof pauseTraining === "function") pauseTraining(true);
+                if (typeof pausarEjercicio === "function") {
+                    pausarEjercicio("voz");
+                }
                 if (video) video.pause();
                 speak("Ejercicio pausado.");
                 break;
 
             case "reanudar":
-                if (typeof resumeTraining === "function") resumeTraining(true);
+                if (typeof reanudarEjercicio === "function") {
+                    reanudarEjercicio("voz");
+                }
                 if (video) video.play();
-                speak("Continuamos.");
+                speak("Continuamos. " + getMotivation());
                 break;
 
             case "detener":
-                if (typeof pauseTraining === "function") pauseTraining(true);
+                if (typeof detenerEjercicio === "function") {
+                    detenerEjercicio("voz");
+                } else if (typeof pausarEjercicio === "function") {
+                    pausarEjercicio("voz");
+                }
                 if (video) video.pause();
-
-                speak("Ejercicio detenido. Puedes decir reanudar o salir.");
-
-                // No redirige automáticamente para evitar errores
+                speak("Ejercicio detenido. Puedes decir seguir o salir.");
                 break;
 
             case "tiempo":
-                speak("Tiempo actual: " + timer);
+                speak("Tiempo actual: " + timerText + " segundos.");
                 break;
 
             case "subir-volumen":
@@ -205,12 +211,14 @@ function initVoiceExecution() {
                 break;
 
             case "salir":
-                running = false;
-                // RUTA DEFINITIVA CORRECTA
+                if (video) video.pause();
+                if (typeof pausarEjercicio === "function") {
+                    pausarEjercicio("voz");
+                }
+                speak("Saliendo del ejercicio.");
                 window.location.href = "/pages/Catalogos/catalogo.html";
                 break;
 
-            // ---------- MODOS ----------
             case "intenso":
             case "recuperativo":
             case "nocturno":
@@ -227,5 +235,5 @@ function initVoiceExecution() {
     };
 
     recognitionEj.start();
-    speak("Comandos activados.");
+    speak("Comandos de voz activados.");
 }

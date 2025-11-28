@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "1234",   // tu contraseña
+    password: "123456",   // tu contraseña
     database: "techfit"
 });
 

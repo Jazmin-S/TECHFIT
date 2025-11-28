@@ -5,93 +5,68 @@
     <title>TECHFIT - Demostración</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/css/General/demostracion.css">
+    <link rel="stylesheet" href="../css/General/demostracion.css">
 </head>
 
 <body>
 
     <!-- NAV BAR -->
     <nav class="navbar">
-
-        <!-- Botón de regresar -->
-        <button class="back-btn" onclick="window.location.href='/pages/Catalogos/catalogo.html'">←</button>
-
-        <!-- Título -->
+        <button class="back-btn" onclick="window.location.href='../pages/Catalogos/catalogo.html'">←</button>
         <h1 class="header-title">TECHFIT - Demostración</h1>
-
-        <!-- Foto de perfil mini -->
-        <img id="miniPerfil" class="perfil-mini" src="/img/user_default.png" onclick="window.location.href='/pages/perfil.html'">
+        <img id="miniPerfil" class="perfil-mini" src="../img/user_default.png" onclick="window.location.href='../pages/perfil.html'">
     </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- CONTENIDO -->
     <section class="demo-container">
 
-        <!-- VIDEO -->
         <div class="video-box">
             <h2 id="titulo-ejercicio" class="titulo-ejercicio">Ejercicio</h2>
 
             <video id="video-ejercicio" controls></video>
 
-            <!-- BOTÓN INICIAR SIN VOZ -->
-            <button class="btn-iniciar" onclick="window.location.href='/pages/ejecucion.html?ejercicio='+new URLSearchParams(window.location.search).get('ejercicio')">
+            <button class="btn-iniciar"
+                onclick="window.location.href='../pages/ejecucion.html?ejercicio='+new URLSearchParams(window.location.search).get('ejercicio')">
                 Iniciar ejercicio
             </button>
-
         </div>
 
-        <!-- TARJETA DERECHA COMPLETA -->
         <div class="instr-box">
 
-            <!-- INSTRUCCIONES -->
             <h3>Instrucciones</h3>
             <ol id="lista-instrucciones"></ol>
 
-            <!-- TIEMPO POR NIVELES -->
             <h3>Tiempo recomendado</h3>
             <ul id="tiempos-nivel">
                 <li><strong>Principiante:</strong> <span id="tiempo-principiante"></span></li>
                 <li><strong>Intermedio:</strong> <span id="tiempo-intermedio"></span></li>
-                <li><strong>Avanzado / Experto:</strong> <span id="tiempo-avanzado"></span></li>
+                <li><strong>Avanzado:</strong> <span id="tiempo-avanzado"></span></li>
             </ul>
 
-            <!-- BENEFICIOS -->
-            <h3>Beneficios del ejercicio</h3>
+            <h3>Beneficios</h3>
             <ul id="beneficios"></ul>
         </div>
 
     </section>
 
     <!-- BOTÓN DE COMANDOS -->
-    <button class="voice-btn" onclick="toggleVoicePanel()">🎤 Comandos</button>
+    <button id="btnVoicePanel" class="voice-btn">🎤 Comandos</button>
 
-    <!-- PANEL DE COMANDOS -->
+    <!-- PANEL -->
     <div id="voicePanel" class="voice-panel">
         <h4>Comandos disponibles:</h4>
         <ul>
             <li>“Iniciar ejercicio”</li>
-            <li>“Reproducir / pausar video”</li>
-            <li>“subir / bajar volumen”</li>
+            <li>“Reproducir video / pausar video”</li>
+            <li>“Subir volumen / bajar volumen”</li>
             <li>“Explicar ejercicio”</li>
             <li>“Salir”</li>
         </ul>
     </div>
 
-    <!-- JS -->
-    <script src="/js/voice-demostracion.js"></script>
+    <!-- JS (RUTAS CORRECTAS) -->
+    <script src="/js/voice/voice-demostracion.js"></script>
     <script src="/js/demostracion.js"></script>
-
-    <script>
-        // Mini foto de perfil (si el usuario subió una)
-        let fotoMini = localStorage.getItem("fotoPerfil");
-        if (fotoMini) {
-            document.getElementById("miniPerfil").src = fotoMini;
-        }
-
-        // Toggle del panel de comandos
-        function toggleVoicePanel() {
-            document.getElementById("voicePanel").classList.toggle("active");
-        }
-    </script>
 
 </body>
 </html>

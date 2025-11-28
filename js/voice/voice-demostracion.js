@@ -1,29 +1,26 @@
 let recognition = null;
 let globalVoiceActive = false;
 
-// Cuando cargue la página iniciamos todo
 document.addEventListener("DOMContentLoaded", () => {
     iniciarVozDemostracion();
     activarPanelComandosDemostracion();
 });
 
-// ---------------------------------------------------
+// --------------------------------------------
 // PANEL DE COMANDOS
-// ---------------------------------------------------
+// --------------------------------------------
 function activarPanelComandosDemostracion() {
     const btn = document.getElementById("btnVoicePanel");
     const panel = document.getElementById("voicePanel");
 
-    if (btn && panel) {
-        btn.addEventListener("click", () => {
-            panel.classList.toggle("active");
-        });
-    }
+    btn.addEventListener("click", () => {
+        panel.classList.toggle("active");
+    });
 }
 
-// ---------------------------------------------------
+// --------------------------------------------
 // LEER INSTRUCCIONES EN VOZ
-// ---------------------------------------------------
+// --------------------------------------------
 function leerInstrucciones() {
     const pasos = [...document.querySelectorAll("#lista-instrucciones li")]
         .map(li => li.textContent)
@@ -35,23 +32,28 @@ function leerInstrucciones() {
     window.speechSynthesis.speak(speech);
 }
 
-// ---------------------------------------------------
-// RECONOCIMIENTO DE VOZ
-// ---------------------------------------------------
+// --------------------------------------------
+// ACTIVAR RECONOCIMIENTO DE VOZ
+// --------------------------------------------
 function iniciarVozDemostracion() {
+
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SR) {
-        console.log("Reconocimiento de voz no disponible");
+        console.log("API de voz NO disponible");
         return;
     }
 
     recognition = new SR();
     recognition.lang = "es-MX";
     recognition.continuous = true;
+    recognition.interimResults = false;
 
     recognition.onresult = (event) => {
-        const comando = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+        const comando = event.results[event.results.length - 1][0].transcript
+            .toLowerCase()
+            .trim();
+
         console.log("🎤 Comando detectado:", comando);
 
         const params = new URLSearchParams(window.location.search);
@@ -60,57 +62,24 @@ function iniciarVozDemostracion() {
         const video = document.getElementById("video-ejercicio");
 
         // ---------------------------
-        //   INICIAR EJERCICIO
-        // ---------------------------
         if (comando.includes("iniciar ejercicio")) {
-            window.location.href = `/pages/ejecucion.html?ejercicio=${ejercicioActual}`;
+            window.location.href = `../pages/ejecucion.html?ejercicio=${ejercicioActual}`;
         }
 
-        // ---------------------------
-        //   REPRODUCIR VIDEO
-        // ---------------------------
-        if (comando.includes("reproducir video") || comando.includes("reproducir")) {
-            if (video) video.play();
-        }
+        if (comando.includes("reproducir")) video.play();
+        if (comando.includes("pausar")) video.pause();
 
-        // ---------------------------
-        //   PAUSAR VIDEO
-        // ---------------------------
-        if (comando.includes("pausar video") || comando.includes("pausa")) {
-            if (video) video.pause();
-        }
+        if (comando.includes("subir volumen"))
+            video.volume = Math.min(video.volume + 0.2, 1);
 
-        // ---------------------------
-        //   SUBIR VOLUMEN
-        // ---------------------------
-        if (comando.includes("subir volumen")) {
-            if (video && video.volume < 1) {
-                video.volume = Math.min(video.volume + 0.2, 1);
-            }
-        }
+        if (comando.includes("bajar volumen"))
+            video.volume = Math.max(video.volume - 0.2, 0);
 
-        // ---------------------------
-        //   BAJAR VOLUMEN
-        // ---------------------------
-        if (comando.includes("bajar volumen")) {
-            if (video && video.volume > 0) {
-                video.volume = Math.max(video.volume - 0.2, 0);
-            }
-        }
-
-        // ---------------------------
-        //   EXPLICAR EJERCICIO
-        // ---------------------------
-        if (comando.includes("explicar ejercicio") || comando.includes("explicacion")) {
+        if (comando.includes("explicar"))
             leerInstrucciones();
-        }
 
-        // ---------------------------
-        //   SALIR
-        // ---------------------------
-        if (comando.includes("salir")) {
-            window.location.href = "/pages/Catalogos/catalogo.html";
-        }
+        if (comando.includes("salir"))
+            window.location.href = "../pages/Catalogos/catalogo.html";
     };
 
     recognition.onend = () => {

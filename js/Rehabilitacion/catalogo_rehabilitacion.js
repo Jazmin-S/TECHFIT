@@ -40,3 +40,14 @@ ejercicios_rehab.forEach(e => {
 
     gridRehab.appendChild(card);
 });
+// ============================
+// CERRAR SESIÓN desde menú
+// ============================
+function cerrarSesion() {
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("fotoPerfil");
+    window.location.href = "/index.html"; // ← mandar a index como quieres ✅
+}
+
+// Conectar botón del sidebar
+document.getElementById("logoutBtn")?.addEventListener("click", cerrarSesion);

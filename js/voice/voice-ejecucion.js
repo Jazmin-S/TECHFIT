@@ -34,7 +34,7 @@ function speak(text) {
 function getMotivation() {
     const frases = [
         "¡Lo estás haciendo increíble!",
-        "Mantén el ritmo, mi pequeño Sarmiento.",
+        "Mantén el ritmo.",
         "Muy bien, tu postura está mejor.",
         "No te rindas, tú puedes.",
         "Eres más fuerte de lo que crees.",

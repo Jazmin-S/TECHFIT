@@ -45,3 +45,15 @@ ejercicios_adultos.forEach(e => {
 
     gridAdultos.appendChild(card);
 });
+
+// ============================
+// CERRAR SESIÓN desde menú (Adulto mayor)
+// ============================
+function cerrarSesion() {
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("fotoPerfil");
+    window.location.href = "/index.html"; // ← te manda a index ✅
+}
+
+// Conectar botón del sidebar de adultos ✅
+document.getElementById("logoutBtn")?.addEventListener("click", cerrarSesion);

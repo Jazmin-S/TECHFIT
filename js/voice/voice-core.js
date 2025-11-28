@@ -18,7 +18,13 @@ const ejerciciosVoz = {
     "elevaciones laterales de pierna": "/pages/demostracion.html?ejercicio=pierna",
     "remo con banda": "/pages/demostracion.html?ejercicio=remo_banda",
     "elevaciones de talones": "/pages/demostracion.html?ejercicio=talones",
-    "estiramiento de cuello": "/pages/demostracion.html?ejercicio=estiramiento_cuello"
+    "estiramiento de cuello": "/pages/demostracion.html?ejercicio=estiramiento_cuello",
+    "marcha en el lugar": "/pages/demostracion_adultos.html?ejercicio=marcha",
+    "elevación de taloes": "/pages/demostracion_adultos.html?ejercicio=talones_adulto",
+    "sentarse y pararse": "/pages/demostracion_adultos.html?ejercicio=sentarse",
+    "elevación de brazos": "/pages/demostracion_adultos.html?ejercicio=brazos_adulto",
+    "circulos de hombro": "/pages/demostracion_adultos.html?ejercicio=hombros_adulto",
+    "extensión de pierna sentado": "/pages/demostracion_adultos.html?ejercicio=pierna_adulto"
 };
 
 function normalizar(texto) {

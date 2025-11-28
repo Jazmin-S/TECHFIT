@@ -1,51 +1,21 @@
-// ============================
-// VERIFICAR SESIÓN
-// ============================
 let usuario = JSON.parse(localStorage.getItem("usuario"));
 
 if (!usuario) {
-    alert("Debes iniciar sesión primero.");
+    // No se rompe, solo avisa y redirige ✅
+    alert("No hay sesión activa, inicia sesión.");
     window.location.href = "/index.html";
+    throw new Error("Sin sesión");
 }
 
-// ============================
-// MOSTRAR DATOS
-// ============================
+// Mostrar datos solo cuando hay sesión ✅
 document.getElementById("nombreUsuario").textContent = usuario.nombre;
 document.getElementById("correoUsuario").textContent = usuario.correo;
-document.getElementById("tipoUsuario").textContent = usuario.tipo || usuario.tipo_usuario;
-document.getElementById("fechaRegistro").textContent = usuario.fecha_registro || "N/A";
+document.getElementById("tipoUsuario").textContent = usuario.tipo;
+document.getElementById("fechaRegistro").textContent = usuario.fecha_registro;
 
-// ============================
-// MOSTRAR FOTO GUARDADA
-// ============================
-let fotoGuardada = localStorage.getItem("fotoPerfil");
-if (fotoGuardada) {
-    document.getElementById("perfil-img").src = fotoGuardada;
-}
+let foto = localStorage.getItem("fotoPerfil");
+document.getElementById("perfil-img").src = foto || usuario.fotoPerfil || "/img/user_default.png";
 
-// ============================
-// CAMBIO DE FOTO
-// ============================
-document.getElementById("perfil-img").addEventListener("click", () => {
-    document.getElementById("inputFoto").click();
-});
-
-document.getElementById("inputFoto").addEventListener("change", function () {
-    const file = this.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        localStorage.setItem("fotoPerfil", e.target.result);
-        document.getElementById("perfil-img").src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-});
-
-// ============================
-// CERRAR SESIÓN
-// ============================
 function cerrarSesion() {
     localStorage.removeItem("usuario");
     localStorage.removeItem("fotoPerfil");

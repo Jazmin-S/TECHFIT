@@ -5,7 +5,6 @@
     <title>Mi Perfil - TECHFIT</title>
     <link rel="stylesheet" href="/css/perfil.css">
 </head>
-
 <body>
 
 <nav class="navbar">
@@ -14,9 +13,8 @@
 </nav>
 
 <div class="profile-container">
-
     <img id="perfil-img" src="/img/user_default.png" alt="Foto de perfil">
-    <input type="file" id="inputFoto" accept="image/*">
+    <input type="file" id="inputFoto" accept="image/*" hidden>
 
     <div class="profile-data">
         <p><strong>Nombre:</strong> <span id="nombreUsuario"></span></p>
@@ -26,9 +24,9 @@
     </div>
 
     <button class="btnPerfil" onclick="cerrarSesion()">Cerrar sesión</button>
-
 </div>
 
 <script src="/js/perfil.js"></script>
+
 </body>
 </html>

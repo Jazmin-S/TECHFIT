@@ -118,6 +118,9 @@ function initVoiceExecution() {
         const comandosAceptados = {
             "pausar": "pausar",
             "pausa": "pausar",
+            "pasar": "pausar",
+            "posar": "pausar",
+            "pausa r": "pausar",
 
             "reanudar": "reanudar",
             "seguir": "reanudar",
@@ -135,6 +138,8 @@ function initVoiceExecution() {
 
             "subir volumen": "subir-volumen",
             "bajar volumen": "bajar-volumen",
+            "subir bolumen": "subir-volumen",
+            "bajar bolumen": "bajar-volumen",
 
             // --- SALIR REAL ---
             "salir": "salir",
